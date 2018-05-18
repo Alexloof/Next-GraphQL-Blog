@@ -1,3 +1,4 @@
+export default `
 type Query {
   posts(
     filter: String
@@ -5,7 +6,8 @@ type Query {
     first: Int
     orderBy: PostOrderByInput
   ): PostFeed!
-  users: [User!]!
+  users: [User!]
+  posts: [Post]
 }
 
 type PostFeed {
@@ -73,3 +75,4 @@ enum PostOrderByInput {
   updatedAt_ASC
   updatedAt_DESC
 }
+`

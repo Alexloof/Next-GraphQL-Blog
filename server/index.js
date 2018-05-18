@@ -1,33 +1,44 @@
-const { GraphQLServer } = require('graphql-yoga')
-const next = require('next')
+const express = require('express')
+const bodyParser = require('body-parser')
+const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
+const { makeExecutableSchema } = require('graphql-tools')
+
+import next from 'next'
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-const resolvers = require('./resolvers')
+import resolvers from './resolvers'
+import typeDefs from './schema'
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+})
 
 app.prepare().then(() => {
-  const server = new GraphQLServer({
-    typeDefs: './server/schema.graphql',
-    resolvers
-  })
+  const server = express()
 
-  const options = {
-    port: 4000,
-    endpoint: '/graphql',
-    subscriptions: '/subscriptions',
-    playground: '/playground'
-  }
+  server.use(
+    '/graphql',
+    bodyParser.json(),
+    graphqlExpress(req => {
+      return {
+        schema
+        // other options here
+      }
+    })
+  )
 
-  server.express.get('*', (req, res) => {
+  server.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
+
+  server.get('*', (req, res) => {
     return handle(req, res)
   })
 
-  server.start(options, ({ port }) =>
-    console.log(
-      `Server started, listening on port ${port} for incoming requests.`
-    )
-  )
+  server.listen(3000, () => {
+    console.log(`🚀 Server ready at /3000`)
+  })
 })

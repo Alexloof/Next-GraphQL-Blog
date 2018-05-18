@@ -1,9 +1,10 @@
-import users from '../db/index'
+import data from '../db/index'
 
-function users(parent, args, ctx, info) {
-  return users
+function posts(parent, args, ctx, info) {
+  console.log(data)
+  return data
 }
 
 module.exports = {
-  users: users
+  posts
 }
