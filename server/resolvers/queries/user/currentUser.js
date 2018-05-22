@@ -1,6 +1,7 @@
 import User from '../../../db/models/User'
+import { getUserId } from '../../../utils'
 
 export default async (root, args, ctx) => {
-  console.log('context', ctx)
-  return User.findOne({}).lean()
+  const userId = getUserId(ctx)
+  return await User.findOne({ _id: userId }).lean()
 }
