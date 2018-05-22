@@ -5,8 +5,8 @@ type Query {
   #   first: Int
   #   orderBy: PostOrderByInput
   # ): PostFeed!
-  users: [User!]
-  posts: [Post]
+  allUsers: [User!]
+  currentUser: User!
 }
 
 type PostFeed {
@@ -28,7 +28,7 @@ type AuthPayload {
 }
 
 type Post {
-  id: ID!
+  _id: ID!
   createdAt: String!
   updatedAt: String!
   name: String!
@@ -39,7 +39,7 @@ type Post {
 }
 
 type Comment {
-  id: ID!
+  _id: ID!
   createdAt: String!
   text: String!
   postedBy: User!
@@ -47,13 +47,13 @@ type Comment {
 }
 
 type Like {
-  id: ID!
+  _id: ID!
   user: User!
   post: Post!
 }
 
 type User {
-  id: ID!
+  _id: ID!
   createdAt: String!
   name: String!
   email: String!
