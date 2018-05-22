@@ -1,0 +1,19 @@
+{
+  "name": "next-graphql-blogg",
+  "scripts": {
+    "dev": "nodemon index.js --exec babel-node --presets=@babel/preset-env",
+    "start": "set NODE_ENV=production node index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "graphql-yoga": "^1.14.1",
+    "jsonwebtoken": "^8.2.1",
+    "next": "^6.0.3",
+    "nodemon": "^1.17.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.46",
+    "@babel/node": "^7.0.0-beta.46",
+    "@babel/preset-env": "^7.0.0-beta.46"
+  }
+}

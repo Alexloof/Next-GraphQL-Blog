@@ -1,0 +1,14 @@
+{
+  "name": "create-next-example-app",
+  "scripts": {
+    "dev": "node index.js",
+    "build": "next build",
+    "start": "set NODE_ENV=production&& node index.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "next": "^6.0.3",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
+  }
+}
