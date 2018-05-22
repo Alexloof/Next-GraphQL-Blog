@@ -4,7 +4,6 @@ import mongoose from 'mongoose'
 
 const MONGO_URL = process.env.MONGO_URL
 
-// Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise
 
 export default () => {
