@@ -1,11 +1,10 @@
-export default `
 type Query {
-  posts(
-    filter: String
-    skip: Int
-    first: Int
-    orderBy: PostOrderByInput
-  ): PostFeed!
+  # posts(
+  #   filter: String
+  #   skip: Int
+  #   first: Int
+  #   orderBy: PostOrderByInput
+  # ): PostFeed!
   users: [User!]
   posts: [Post]
 }
@@ -75,4 +74,3 @@ enum PostOrderByInput {
   updatedAt_ASC
   updatedAt_DESC
 }
-`

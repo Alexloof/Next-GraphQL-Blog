@@ -2,19 +2,9 @@ import { GraphQLServer } from 'graphql-yoga'
 
 const port = parseInt(process.env.PORT, 10) || 4000
 
-const typeDefs = `
-  type Query {
-    hello(name: String): String!
-  }
-`
+import resolvers from './resolvers'
 
-const resolvers = {
-  Query: {
-    hello: (_, { name }) => `Hello ${name || 'World'}`
-  }
-}
-
-const server = new GraphQLServer({ typeDefs, resolvers })
+const server = new GraphQLServer({ typeDefs: './schema.graphql', resolvers })
 
 const options = {
   port
