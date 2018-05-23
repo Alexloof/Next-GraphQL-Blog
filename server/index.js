@@ -5,16 +5,16 @@ import helmet from 'helmet'
 import compression from 'compression'
 import resolvers from './resolvers'
 import typeDefs from './types'
-import initDB from './db'
+import db from './db'
 
 const port = parseInt(process.env.PORT, 10) || 4000
 
-initDB()
+const initDB = async () => await db()
 
 const server = new GraphQLServer({
   typeDefs,
   resolvers,
-  context: req => ({ ...req })
+  context: async req => ({ ...req, db: await initDB() })
 })
 
 server.express.use(compression())

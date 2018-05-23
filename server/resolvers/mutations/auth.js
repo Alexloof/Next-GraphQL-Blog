@@ -2,9 +2,11 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import User from '../../db/models/User'
 
-export const signup = async (_, { email, password, name }) => {
+export const signup = async (_, { email, password, name }, ctx) => {
   try {
-    let user = await User.findOne({ email }).lean()
+    const userModel = ctx.db.model('user')
+
+    let user = await userModel.findOne({ email }).lean()
 
     if (user) {
       throw new Error('Email is already taken')
@@ -13,12 +15,12 @@ export const signup = async (_, { email, password, name }) => {
     const createdAt = new Date()
 
     const hashedPassword = await bcrypt.hash(password, 10)
-    user = await new User({
+    user = await userModel.create({
       email,
       password: hashedPassword,
       name,
       createdAt
-    }).save()
+    })
 
     const token = jwt.sign({ userId: user._id }, process.env.AUTH_SECRET)
 
