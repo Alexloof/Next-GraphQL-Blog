@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 import { GraphQLServer } from 'graphql-yoga'
+import depthLimit from 'graphql-depth-limit'
 import helmet from 'helmet'
 import compression from 'compression'
 import resolvers from './resolvers'
@@ -20,7 +21,8 @@ const startServer = async () => {
       ...req,
       user: initUser(req),
       db: initDB
-    })
+    }),
+    validationRules: [depthLimit(10)]
   })
 
   server.express.use(compression())

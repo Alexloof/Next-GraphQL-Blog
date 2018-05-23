@@ -8,6 +8,7 @@
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.2",
     "dotenv": "^5.0.1",
+    "graphql-depth-limit": "^1.1.0",
     "graphql-yoga": "^1.14.1",
     "helmet": "^3.12.1",
     "jsonwebtoken": "^8.2.1",
