@@ -1,6 +1,7 @@
 import allPosts from './allPosts'
 import postById from './postById'
 import postedBy from './postedBy'
+import comments from './comments'
 
 export default {
   Query: {
@@ -9,7 +10,7 @@ export default {
   },
   Post: {
     postedBy,
-    comments: () => [],
+    comments,
     likes: () => []
   }
 }

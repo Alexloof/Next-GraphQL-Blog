@@ -1,7 +1,7 @@
 export default /* GraphQL */ `
 type Like {
   _id: ID!
-  user: User!
+  likedBy: User!
   post: Post!
 }
 

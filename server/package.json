@@ -1,7 +1,7 @@
 {
   "name": "next-graphql-blogg",
   "scripts": {
-    "dev": "nodemon index.js --exec babel-node --presets=@babel/preset-env",
+    "dev": "nodemon index.js --exec babel-node",
     "start": "set NODE_ENV=production node index.js"
   },
   "dependencies": {

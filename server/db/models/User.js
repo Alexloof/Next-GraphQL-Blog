@@ -15,7 +15,10 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   // Don't return password unless specified to
-  password: { type: String, select: false }
+  password: {
+    type: String,
+    select: false
+  }
 })
 
 const User = mongoose.model('user', userSchema)
