@@ -1,5 +1,6 @@
-import user from './user'
+import { merge } from 'lodash'
 
-export default {
-  ...user
-}
+import user from './user'
+import post from './post'
+
+export default merge(user, post)

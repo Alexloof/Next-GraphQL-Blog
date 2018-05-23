@@ -1,5 +1,6 @@
 import allUsers from './allUsers'
 import currentUser from './currentUser'
+import posts from './posts'
 
 export default {
   Query: {
@@ -7,6 +8,8 @@ export default {
     currentUser
   },
   User: {
-    likes: () => []
+    likes: () => [],
+    comments: () => [],
+    posts
   }
 }
