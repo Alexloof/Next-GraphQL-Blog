@@ -11,5 +11,6 @@ const MONGO_URL = process.env.MONGO_URL
 mongoose.Promise = global.Promise
 
 export default async () => {
+  console.log('connectar MongoDB')
   return await mongoose.connect(MONGO_URL)
 }

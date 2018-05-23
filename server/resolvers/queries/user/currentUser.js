@@ -2,9 +2,10 @@ import { getUserId } from '../../../utils'
 
 export default async (parent, args, ctx) => {
   try {
-    const userId = getUserId(ctx)
+    if (!ctx.user) throw new Error('Not authenticated')
+
     const user = ctx.db.model('user')
-    return await user.findOne({ _id: userId }).lean()
+    return await user.findOne({ _id: ctx.user }).lean()
   } catch (error) {
     throw new Error(error)
   }
