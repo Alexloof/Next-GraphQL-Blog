@@ -1,4 +1,5 @@
 export default /* GraphQL */ ` 
+
 type Post {
   _id: ID!
   createdAt: String!
@@ -11,33 +12,23 @@ type Post {
 }
 
 type PostFeed {
-  posts: [Post!]!
+  posts: [Post!]
   count: Int!
 }
 
-# extend type Query {
-#   posts(
-#     filter: String
-#     skip: Int
-#     first: Int
-#     orderBy: PostOrderByInput
-#   ): PostFeed!
-# }
+extend type Query {
+  allPosts(
+    filter: String
+    offset: Int
+    limit: Int
+    sort: String
+  ): PostFeed!
+
+  # allPosts: [Post!]
+  postById(_id: String): Post!
+}
 
 extend type Mutation {
   writePost(name: String!, content: String!): Post!
-}
-
-enum PostOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  description_ASC
-  description_DESC
-  url_ASC
-  url_DESC
-  updatedAt_ASC
-  updatedAt_DESC
 }
 `
