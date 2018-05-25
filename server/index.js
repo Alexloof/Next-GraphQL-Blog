@@ -35,7 +35,9 @@ const startServer = async () => {
 
   server.start(options, ({ port }) =>
     console.log(
-      `Server started, listening on port ${port} for incoming requests.`
+      `Server started, listening on port ${port} for incoming requests. [${
+        process.env.NODE_ENV
+      }]`
     )
   )
 }
