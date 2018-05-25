@@ -1,7 +1,12 @@
-export default async (parent, args, ctx) => {
+export default async ({ commentedBy }, args, { db, loaders }) => {
   try {
-    const userModel = ctx.db.model('user')
-    return await userModel.findOne({ _id: parent.commentedBy })
+    const userModel = db.model('user')
+
+    return loaders.postedByById.load({
+      data: commentedBy,
+      model: userModel,
+      field: '_id'
+    })
   } catch (error) {
     throw new Error(error)
   }

@@ -1,7 +1,12 @@
-export default async (parent, args, ctx) => {
+export default async ({ _id }, args, { db, loaders }) => {
   try {
-    const postModel = ctx.db.model('post')
-    return await postModel.find({ postedBy: parent._id }).exec()
+    const postModel = db.model('post')
+
+    return loaders.postsByPostedBy.load({
+      data: _id,
+      model: postModel,
+      field: 'postedBy'
+    })
   } catch (error) {
     throw new Error(error)
   }

@@ -1,7 +1,12 @@
-export default async (parent, args, ctx) => {
+export default async ({ _id }, args, { db, loaders }) => {
   try {
-    const likeModel = ctx.db.model('like')
-    return await likeModel.find({ likedBy: parent._id }).exec()
+    const likeModel = db.model('like')
+
+    return loaders.likesByLikedBy.load({
+      data: _id,
+      model: likeModel,
+      field: 'likedBy'
+    })
   } catch (error) {
     throw new Error(error)
   }

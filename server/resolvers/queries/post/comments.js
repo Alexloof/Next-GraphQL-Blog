@@ -1,9 +1,8 @@
 export default async ({ _id }, args, { db, loaders }) => {
   try {
     const commentModel = db.model('comment')
-    //return await commentModel.find({ post: parent._id }).exec()
 
-    return loaders.commentByPost.load({
+    return loaders.commentsByPost.load({
       data: _id,
       model: commentModel,
       field: 'post'

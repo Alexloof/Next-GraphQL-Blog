@@ -3,6 +3,7 @@ import _ from 'lodash'
 
 export default () =>
   new Dataloader(async objArray => {
+    //console.log(objArray)
     const model = objArray[0].model
     const field = objArray[0].field
 
