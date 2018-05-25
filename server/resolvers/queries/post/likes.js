@@ -1,7 +1,7 @@
 export default async (parent, args, ctx) => {
   try {
-    const userModel = ctx.db.model('user')
-    return await userModel.findOne({ _id: parent.commentedBy })
+    const likeModel = ctx.db.model('like')
+    return await likeModel.find({ post: parent._id }).exec()
   } catch (error) {
     throw new Error(error)
   }

@@ -12,6 +12,8 @@ export default async (parent, { name, content }, ctx) => {
       postedBy: ctx.user
     })
 
+    ctx.pubsub.publish('newLink', { newPost: post })
+
     return post
   } catch (error) {
     throw new Error(error)

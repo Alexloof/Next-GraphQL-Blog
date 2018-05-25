@@ -1,6 +1,6 @@
 require('dotenv').config()
 
-import { GraphQLServer } from 'graphql-yoga'
+import { GraphQLServer, PubSub } from 'graphql-yoga'
 import depthLimit from 'graphql-depth-limit'
 import helmet from 'helmet'
 import compression from 'compression'
@@ -14,11 +14,14 @@ const port = parseInt(process.env.PORT, 10) || 4000
 const startServer = async () => {
   const initDB = await db()
 
+  const pubsub = new PubSub()
+
   const server = new GraphQLServer({
     typeDefs,
     resolvers,
     context: async req => ({
       ...req,
+      pubsub,
       user: initUser(req),
       db: initDB
     }),

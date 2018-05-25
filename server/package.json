@@ -1,5 +1,5 @@
 {
-  "name": "next-graphql-blogg",
+  "name": "next-graphql-server",
   "scripts": {
     "start": "node ./build/main.js",
     "dev": "backpack dev",

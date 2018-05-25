@@ -15,6 +15,8 @@ export default async (parent, { postId }, ctx) => {
       post: postId
     })
 
+    ctx.pubsub.publish('newLike', { newLike: like })
+
     return like
   } catch (error) {
     throw new Error(error)

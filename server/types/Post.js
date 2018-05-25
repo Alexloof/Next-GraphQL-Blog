@@ -23,12 +23,14 @@ extend type Query {
     limit: Int
     sort: String
   ): PostFeed!
-
-  # allPosts: [Post!]
   postById(_id: String): Post!
 }
 
 extend type Mutation {
   writePost(name: String!, content: String!): Post!
+}
+
+extend type Subscription {
+  newPost: Post!
 }
 `

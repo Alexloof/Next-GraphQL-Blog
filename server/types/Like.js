@@ -6,6 +6,10 @@ type Like {
 }
 
 extend type Mutation {
-  likePost(postId: ID!): Like
+  likePost(postId: ID!): Like!
+}
+
+extend type Subscription {
+  newLike: Like!
 }
 `

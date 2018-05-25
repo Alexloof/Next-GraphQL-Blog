@@ -10,6 +10,8 @@ export default async (parent, { postId, text }, ctx) => {
       post: postId
     })
 
+    ctx.pubsub.publish('newComment', { newComment: comment })
+
     return comment
   } catch (error) {
     throw new Error(error)

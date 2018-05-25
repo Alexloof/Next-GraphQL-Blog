@@ -8,6 +8,10 @@ type Comment {
 }
 
 extend type Mutation {
-  commentPost(postId: ID!, text: String): Comment
+  commentPost(postId: ID!, text: String): Comment!
+}
+
+extend type Subscription {
+  newComment: Comment!
 }
 `
