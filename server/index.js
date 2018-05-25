@@ -8,6 +8,7 @@ import resolvers from './resolvers'
 import typeDefs from './types'
 import db from './db'
 import { initUser } from './utils'
+import createLoaders from './loaders'
 
 const port = parseInt(process.env.PORT, 10) || 4000
 
@@ -22,6 +23,7 @@ const startServer = async () => {
     context: async req => ({
       ...req,
       pubsub,
+      loaders: createLoaders(),
       user: initUser(req),
       db: initDB
     }),
