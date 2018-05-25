@@ -1,8 +1,14 @@
-import loaderById from './loaderById'
-import loaderByPost from './loaderByPost'
+import single from './single'
+import multiple from './multiple'
 
 export default () => ({
-  userById: loaderById(),
-  commentById: loaderById(),
-  likeByPost: loaderByPost()
+  // post
+  userById: single(),
+  commentByPost: multiple(),
+  likeByPost: multiple(),
+
+  // user
+  commentByCommentedBy: multiple(),
+  likesByLikedBy: multiple(),
+  postsByPostedBy: multiple()
 })
