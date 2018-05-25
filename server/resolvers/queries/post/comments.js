@@ -2,7 +2,7 @@ export default async ({ _id }, args, { db, loaders }) => {
   try {
     const commentModel = db.model('comment')
 
-    return loaders.commentsByPost.load({
+    return loaders.comments_ByPost.load({
       data: _id,
       model: commentModel,
       field: 'post'

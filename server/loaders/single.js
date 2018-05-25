@@ -13,6 +13,5 @@ export default () =>
     const result = await model.find(query).exec()
 
     const resultById = _.keyBy(result, '_id')
-    const svar = ids.map(id => resultById[id])
-    return svar
+    return ids.map(id => resultById[id])
   })

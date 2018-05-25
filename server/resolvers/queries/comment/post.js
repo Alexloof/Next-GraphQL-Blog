@@ -2,7 +2,7 @@ export default async ({ post }, args, { db, loaders }) => {
   try {
     const postModel = db.model('post')
 
-    return loaders.postById2.load({
+    return loaders.post_ById.load({
       data: post,
       model: postModel,
       field: '_id'
