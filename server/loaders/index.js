@@ -1,9 +1,8 @@
-import userLoader from './userLoader'
-import likeLoader from './likeLoader'
-import commentLoader from './commentLoader'
+import loaderById from './loaderById'
+import loaderByPost from './loaderByPost'
 
 export default () => ({
-  user: userLoader,
-  like: likeLoader,
-  comment: commentLoader
+  userById: loaderById(),
+  commentById: loaderById(),
+  likeByPost: loaderByPost()
 })

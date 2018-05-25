@@ -1,7 +1,7 @@
-export default async (parent, args, ctx) => {
+export default async ({ postedBy }, args, { loaders, db }) => {
   try {
-    const user = ctx.db.model('user')
-    return ctx.loaders.user.load({ id: parent.postedBy, model: user })
+    const user = db.model('user')
+    return loaders.userById.load({ id: postedBy, model: user })
   } catch (error) {
     throw new Error(error)
   }
