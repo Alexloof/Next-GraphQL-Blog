@@ -1,5 +1,9 @@
 import userLoader from './userLoader'
+import likeLoader from './likeLoader'
+import commentLoader from './commentLoader'
 
 export default () => ({
-  user: userLoader
+  user: userLoader,
+  like: likeLoader,
+  comment: commentLoader
 })
