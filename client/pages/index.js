@@ -3,6 +3,7 @@ import Head from '../components/head'
 import Nav from '../components/nav'
 
 import styled from 'styled-components'
+import { Button } from 'semantic-ui-react'
 
 export default () => {
   return (
@@ -12,6 +13,7 @@ export default () => {
 
       <div className="hero">
         <StyledHeader>Welcome to Nextssss!</StyledHeader>
+        <Button content="Primary" primary />
         <p className="description">
           To get started, edit <code>pages/index.js</code> and save to reload.
         </p>
