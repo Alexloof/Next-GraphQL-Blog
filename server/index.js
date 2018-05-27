@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 import { GraphQLServer, PubSub } from 'graphql-yoga'
+import session from 'express-session'
 import depthLimit from 'graphql-depth-limit'
 import helmet from 'helmet'
 import compression from 'compression'

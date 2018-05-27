@@ -1,6 +1,6 @@
-export default async (parent, { filter, offset, limit, sort }, ctx) => {
+export default async (parent, { filter, offset, limit, sort }, { db }) => {
   try {
-    const postModel = ctx.db.model('post')
+    const postModel = db.model('post')
     const posts = await postModel
       .find(
         filter
