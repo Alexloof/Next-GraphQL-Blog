@@ -1,4 +1,5 @@
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost'
+import { setContext } from 'apollo-link-context'
 import fetch from 'isomorphic-unfetch'
 
 let apolloClient = null
@@ -8,9 +9,11 @@ if (!process.browser) {
   global.fetch = fetch
 }
 
-function create(initialState) {
+const dev = process.env.NODE_ENV !== 'production'
+
+function create(initialState, { getToken }) {
   const httpLink = new HttpLink({
-    uri: 'http://localhost:4000', // Server URL (must be absolute)
+    uri: dev ? process.env.API_URL_DEV : process.env.API_URL_PROD, // Server URL (must be absolute)
     credentials: 'same-origin' // Additional fetch() options like `credentials` or `headers`
   })
 
@@ -32,16 +35,16 @@ function create(initialState) {
   })
 }
 
-export default function initApollo(initialState) {
+export default function initApollo(initialState, options) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (!process.browser) {
-    return create(initialState)
+    return create(initialState, options)
   }
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    apolloClient = create(initialState)
+    apolloClient = create(initialState, options)
   }
 
   return apolloClient
