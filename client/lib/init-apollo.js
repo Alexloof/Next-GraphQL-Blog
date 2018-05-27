@@ -1,5 +1,6 @@
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost'
 import { setContext } from 'apollo-link-context'
+import { createHttpLink } from 'apollo-link-http'
 import fetch from 'isomorphic-unfetch'
 
 let apolloClient = null
@@ -12,9 +13,9 @@ if (!process.browser) {
 const dev = process.env.NODE_ENV !== 'production'
 
 function create(initialState, { getToken }) {
-  const httpLink = new HttpLink({
+  const httpLink = createHttpLink({
     uri: dev ? process.env.API_URL_DEV : process.env.API_URL_PROD, // Server URL (must be absolute)
-    credentials: 'same-origin' // Additional fetch() options like `credentials` or `headers`
+    credentials: 'include' // Additional fetch() options like `credentials` or `headers`
   })
 
   const authLink = setContext((_, { headers }) => {
@@ -30,7 +31,7 @@ function create(initialState, { getToken }) {
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-    link: authLink.concat(httpLink),
+    link: httpLink,
     cache: new InMemoryCache().restore(initialState || {})
   })
 }

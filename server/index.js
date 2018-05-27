@@ -69,11 +69,11 @@ const startServer = async () => {
     origin: dev ? 'http://localhost:3000' : '[DEPLOYED CLIENT HERE]',
     credentials: true
   }
-  server.express.use(cors(corsOptions))
 
   //option object for graphql yoga
   const options = {
-    port
+    port,
+    cors: corsOptions
   }
 
   server.start(options, ({ port }) =>

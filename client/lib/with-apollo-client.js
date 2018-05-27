@@ -6,7 +6,7 @@ import cookie from 'cookie'
 
 function parseCookies(req, options = {}) {
   console.log('KÖRS HÄR')
-  console.log(req)
+  //console.log(req ? req.headers : null)
   return cookie.parse(req ? req.headers.cookie || '' : document.cookie, options)
 }
 
