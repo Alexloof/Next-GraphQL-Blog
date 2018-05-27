@@ -5,6 +5,8 @@ import propTypes from 'prop-types'
 import cookie from 'cookie'
 
 function parseCookies(req, options = {}) {
+  console.log('KÖRS HÄR')
+  console.log(req)
   return cookie.parse(req ? req.headers.cookie || '' : document.cookie, options)
 }
 
@@ -17,7 +19,6 @@ export default App => {
         router,
         ctx: { req, res }
       } = ctx
-
       let appProps = {}
       if (App.getInitialProps) {
         appProps = await App.getInitialProps(ctx)

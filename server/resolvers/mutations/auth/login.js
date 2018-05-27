@@ -17,8 +17,10 @@ export default async (_, { email, password }, ctx) => {
     // remove password from user object to limit scope (security)
     user.password = undefined
 
+    const token = jwt.sign({ userId: user._id }, process.env.AUTH_SECRET)
+    ctx.request.session.token = token
     return {
-      token: jwt.sign({ userId: user._id }, process.env.AUTH_SECRET),
+      token,
       user
     }
   } catch (err) {

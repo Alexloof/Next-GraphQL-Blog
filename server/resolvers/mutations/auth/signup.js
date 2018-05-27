@@ -22,6 +22,7 @@ export default async (_, { email, password, name }, ctx) => {
     })
 
     const token = jwt.sign({ userId: user._id }, process.env.AUTH_SECRET)
+    ctx.request.session.token = token
 
     return { token, user }
   } catch (err) {
