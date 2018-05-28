@@ -1,34 +1,45 @@
 import Head from './head'
 import Link from 'next/link'
-import { withApollo } from 'react-apollo'
 import Router from 'next/router'
+import React, { Component } from 'react'
 
-const logout = client => {
-  client.resetStore()
-  localStorage.removeItem('userId')
-  Router.push('/logout')
+class Nav extends Component {
+  logout = () => {
+    this.props.client.resetStore().then(() => {
+      localStorage.removeItem('user')
+      Router.push('/logout')
+    })
+  }
+  render() {
+    const { isAuth } = this.props
+    return (
+      <nav>
+        <ul>
+          <li>
+            <Link prefetch href="/">
+              <a>Home</a>
+            </Link>
+            {isAuth && (
+              <Link prefetch href="/user">
+                <a>User</a>
+              </Link>
+            )}
+            {!isAuth && (
+              <Link prefetch href="/login">
+                <a>Login</a>
+              </Link>
+            )}
+            {!isAuth && (
+              <Link prefetch href="/signup">
+                <a>Signup</a>
+              </Link>
+            )}
+            {isAuth && <a onClick={this.logout}>Logout</a>}
+          </li>
+        </ul>
+      </nav>
+    )
+  }
 }
 
-const Nav = props => (
-  <nav>
-    <ul>
-      <li>
-        <Link prefetch href="/">
-          <a>Home</a>
-        </Link>
-        <Link prefetch href="/user">
-          <a>User</a>
-        </Link>
-        <Link prefetch href="/login">
-          <a>Login</a>
-        </Link>
-        <Link prefetch href="/signup">
-          <a>Signup</a>
-        </Link>
-        <a onClick={() => logout(props.client)}>Logout</a>
-      </li>
-    </ul>
-  </nav>
-)
-
-export default withApollo(Nav)
+export default Nav

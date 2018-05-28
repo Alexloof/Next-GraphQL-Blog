@@ -9,10 +9,8 @@ class User extends Component {
     return (
       <Query query={GET_CURRENT_USER}>
         {({ loading, error, data: { currentUser } }) => {
-          console.log('KÖÖÖRS')
           if (loading) return 'Loading...'
           if (error) return `Error! ${error.message}`
-          console.log(currentUser)
           return <div>id: {currentUser.name}</div>
         }}
       </Query>

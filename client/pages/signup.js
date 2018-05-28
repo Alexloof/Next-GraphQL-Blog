@@ -5,6 +5,8 @@ import Router from 'next/router'
 import styled from 'styled-components'
 import Link from 'next/link'
 
+import withUser from '../lib/withUser'
+
 import { Color } from '../styles/variables'
 
 import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
@@ -29,6 +31,22 @@ class Login extends Component {
       const { data } = await signup()
 
       localStorage.setItem('userId', data.signup.user._id)
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          _id: data.signup.user._id,
+          email: data.signup.user.email,
+          name: data.signup.user.name
+        })
+      )
+
+      this.props.setUser({
+        _id: data.signup.user._id,
+        email: data.signup.user.email,
+        name: data.signup.user.name
+      })
+
       Router.push('/')
     } catch (error) {
       this.setState({
@@ -113,12 +131,14 @@ const SIGNUP_MUTATION = gql`
       token
       user {
         _id
+        name
+        email
       }
     }
   }
 `
 
-export default Login
+export default withUser(Login)
 
 const Container = styled.div`
   display: flex;

@@ -21,7 +21,7 @@ export default Page =>
           isAuth = true
         }
       } else {
-        if (localStorage.getItem('userId')) isAuth = true
+        if (localStorage.getItem('user')) isAuth = true
       }
 
       const props = { isAuth, isFromServer }
