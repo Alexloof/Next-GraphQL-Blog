@@ -1,19 +1,17 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-import { UserError } from '../../../utils'
-
 export default async (_, { email, password }, ctx) => {
   try {
     const userModel = ctx.db.model('user')
     const user = await userModel.findOne({ email }, { password: 1 }).lean()
     if (!user) {
-      return new UserError('No such user found')
+      return new Error('No such user found')
     }
 
     const valid = await bcrypt.compare(password, user.password)
     if (!valid) {
-      return new UserError('Invalid password')
+      return new Error('Invalid password')
     }
 
     // remove password from user object to limit scope (security)
@@ -26,6 +24,6 @@ export default async (_, { email, password }, ctx) => {
       user
     }
   } catch (err) {
-    return new UserError(err)
+    return new Error(err)
   }
 }

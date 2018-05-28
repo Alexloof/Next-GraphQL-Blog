@@ -12,41 +12,46 @@ import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
 class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
+    name: ''
   }
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  handleSubmit = async (e, login) => {
+  handleSubmit = async (e, signup) => {
     e.preventDefault()
 
-    const { email, password } = this.state
+    const { email, password, name } = this.state
 
     try {
-      const { data } = await login()
+      const { data } = await signup()
 
-      localStorage.setItem('userId', data.login.user._id)
+      localStorage.setItem('userId', data.signup.user._id)
       Router.push('/')
     } catch (error) {
       this.setState({
         email: '',
-        password: ''
+        password: '',
+        name: ''
       })
     }
   }
 
   render() {
-    const { email, password, errorShake } = this.state
+    const { email, password, name } = this.state
     return (
-      <Mutation mutation={LOGIN_MUTATION} variables={{ email, password }}>
-        {(login, { loading, error, data }) => (
+      <Mutation
+        mutation={SIGNUP_MUTATION}
+        variables={{ email, password, name }}
+      >
+        {(signup, { loading, error, data }) => (
           <Container color={Color}>
             <StyledForm
               color={Color}
               error={!!error}
-              onSubmit={e => this.handleSubmit(e, login)}
+              onSubmit={e => this.handleSubmit(e, signup)}
             >
               <Header size="large">Next Graphql Blog</Header>
               <Form.Field>
@@ -57,6 +62,17 @@ class Login extends Component {
                   placeholder="Please enter your email"
                   autoComplete="email"
                   value={this.state.email}
+                />
+              </Form.Field>
+
+              <Form.Field>
+                <label>Name</label>
+                <input
+                  name="name"
+                  onChange={this.handleChange}
+                  placeholder="Please enter your name"
+                  autoComplete="name"
+                  value={this.state.name}
                 />
               </Form.Field>
 
@@ -78,10 +94,10 @@ class Login extends Component {
               {loading ? (
                 <StyledLoader active inline />
               ) : (
-                <LoginButton type="submit">Login</LoginButton>
+                <LoginButton type="submit">Signup</LoginButton>
               )}
-              <Link href="/signup">
-                <a>No account? Click here to create an account</a>
+              <Link href="/login">
+                <a>Have an account? Click here to login</a>
               </Link>
             </StyledForm>
           </Container>
@@ -91,9 +107,9 @@ class Login extends Component {
   }
 }
 
-const LOGIN_MUTATION = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+const SIGNUP_MUTATION = gql`
+  mutation signup($email: String!, $password: String!, $name: String!) {
+    signup(email: $email, password: $password, name: $name) {
       token
       user {
         _id

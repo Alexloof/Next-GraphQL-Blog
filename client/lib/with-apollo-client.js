@@ -2,35 +2,31 @@ import initApollo from './init-apollo'
 import Head from 'next/head'
 import { getDataFromTree } from 'react-apollo'
 import propTypes from 'prop-types'
-import cookie from 'cookie'
 
 export default App => {
   return class Apollo extends React.Component {
-    static displayName = 'withApollo(App)'
+    static displayName = 'withApolloClient(App)'
     static async getInitialProps(ctx) {
       const {
         Component,
         router,
         ctx: { req, res }
       } = ctx
+      const apolloState = {}
+      const apollo = initApollo()
+
+      ctx.ctx.apolloClient = apollo
 
       let appProps = {}
-
       if (App.getInitialProps) {
         appProps = await App.getInitialProps(ctx)
       }
 
-      const apolloState = {}
-
-      // Run all GraphQL queries in the component tree
-      // and extract the resulting data
-      const apollo = initApollo()
-
-      if (res && res.finished) {
-        // When redirecting, the response is finished.
-        // No point in continuing to render
-        return {}
-      }
+      // if (res && res.finished) {
+      //   // When redirecting, the response is finished.
+      //   // No point in continuing to render
+      //   return {}
+      // }
 
       try {
         // Run all GraphQL queries

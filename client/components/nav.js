@@ -22,6 +22,9 @@ const Nav = props => (
         <Link prefetch href="/login">
           <a>Login</a>
         </Link>
+        <Link prefetch href="/signup">
+          <a>Signup</a>
+        </Link>
         <a onClick={() => logout(props.client)}>Logout</a>
       </li>
     </ul>

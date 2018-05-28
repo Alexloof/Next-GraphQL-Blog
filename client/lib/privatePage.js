@@ -7,10 +7,6 @@ let globalUser = null
 
 export default Page =>
   class BaseComponent extends React.Component {
-    static defaultProps = {
-      user: null
-    }
-
     static async getInitialProps(ctx) {
       const isFromServer = !!ctx.req
 
@@ -38,7 +34,7 @@ export default Page =>
     }
 
     componentDidMount() {
-      const { isAuth, isFromServer } = this.props
+      const { isAuth } = this.props
 
       if (!isAuth) {
         Router.push('/login')
@@ -48,10 +44,11 @@ export default Page =>
 
     render() {
       const { isAuth } = this.props
-
       if (!isAuth) {
         return null
       }
+
+      if (!process.browser) return null
 
       return <Page {...this.props} />
     }

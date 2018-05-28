@@ -1,17 +1,5 @@
 import jwt from 'jsonwebtoken'
 
-export const IsUserError = Symbol('IsUserError')
-
-export class UserError extends Error {
-  constructor(...args) {
-    super(...args)
-    this.name = 'Error'
-    this.message = args[0]
-    this[IsUserError] = true
-    Error.captureStackTrace(this, 'Error')
-  }
-}
-
 export const initUser = req => {
   // if session cookie authorization
   const cookieToken =
