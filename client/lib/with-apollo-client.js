@@ -4,12 +4,6 @@ import { getDataFromTree } from 'react-apollo'
 import propTypes from 'prop-types'
 import cookie from 'cookie'
 
-function parseCookies(req, options = {}) {
-  console.log('KÖRS HÄR')
-  //console.log(req ? req.headers : null)
-  return cookie.parse(req ? req.headers.cookie || '' : document.cookie, options)
-}
-
 export default App => {
   return class Apollo extends React.Component {
     static displayName = 'withApollo(App)'
@@ -19,7 +13,9 @@ export default App => {
         router,
         ctx: { req, res }
       } = ctx
+
       let appProps = {}
+
       if (App.getInitialProps) {
         appProps = await App.getInitialProps(ctx)
       }
@@ -28,12 +24,7 @@ export default App => {
 
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
-      const apollo = initApollo(
-        {},
-        {
-          getToken: () => parseCookies(req).token
-        }
-      )
+      const apollo = initApollo()
 
       if (res && res.finished) {
         // When redirecting, the response is finished.
@@ -79,10 +70,7 @@ export default App => {
       // `getDataFromTree` renders the component first, the client is passed off as a property.
       // After that rendering is done using Next's normal rendering pipeline
       this.apolloClient =
-        props.apolloClient ||
-        initApollo(props.apolloState.data, {
-          getToken: () => parseCookies().token
-        })
+        props.apolloClient || initApollo(props.apolloState.data)
     }
 
     render() {

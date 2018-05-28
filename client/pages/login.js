@@ -1,145 +1,94 @@
 import React, { Component } from 'react'
-import { graphql, compose, Query } from 'react-apollo'
+import { graphql, compose, Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
-
+import Router from 'next/router'
 import styled from 'styled-components'
-import {
-  Button,
-  Form,
-  Loader,
-  Message,
-  Transition,
-  Header
-} from 'semantic-ui-react'
 
 import { Color } from '../styles/variables'
+
+import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
 
 class Login extends Component {
   state = {
     email: '',
-    password: '',
-    isLoading: false,
-    errorMessage: '',
-    errorShake: true
+    password: ''
   }
 
   handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value, errorMessage: '' })
+    this.setState({ [event.target.name]: event.target.value })
   }
 
-  handleSubmit = async event => {
-    const { email, password, errorShake } = this.state
-    event.preventDefault()
-    if (!email || !password) {
-      return this.setState({
-        errorMessage: 'You must provide login credentials',
-        errorShake: !errorShake
-      })
-    }
+  handleSubmit = async (e, login) => {
+    const { email, password } = this.state
 
-    this.setState({ isLoading: true, errorMessage: '' })
+    e.preventDefault()
 
-    //console.log(this.props)
     try {
-      const result = await this.props.loginMutation({
-        variables: {
-          email,
-          password
-        }
-      })
-      console.log('cookie', document.cookie)
+      const { data } = await login()
+
+      localStorage.setItem('userId', data.login.user._id)
+
+      Router.push('/')
     } catch (error) {
-      console.log(error)
+      this.setState({
+        email: '',
+        password: ''
+      })
     }
-
-    // const user = await login(this.state.email, this.state.password)
-
-    // // set token in sessionStorage
-    // if (user.token) {
-    //   this.persistUser(user)
-    //   this.props.history.push('/')
-    // } else {
-    //   this.setState({
-    //     isLoading: false,
-    //     errorMessage: 'Login failed',
-    //     errorShake: !this.state.errorShake
-    //   })
-    // }
   }
-
-  // persistUser = user => {
-  //   sessionStorage.setItem('admin-user', JSON.stringify(user))
-  // }
 
   render() {
+    const { email, password, errorShake } = this.state
     return (
-      <Container color={Color}>
-        <Transition
-          animation={'shake'}
-          duration={600}
-          visible={this.state.errorShake}
-        >
-          <StyledForm
-            color={Color}
-            error={!!this.state.errorMessage}
-            onSubmit={this.handleSubmit}
-          >
-            <Header size="large">Next Graphql Blog</Header>
-            <Form.Field>
-              <label>Email</label>
-              <input
-                name="email"
-                onChange={this.handleChange}
-                placeholder="Please enter your email"
-                autoComplete="email"
-                value={this.state.email}
-              />
-            </Form.Field>
+      <Mutation mutation={LOGIN_MUTATION} variables={{ email, password }}>
+        {(login, { loading, error, data }) => (
+          <Container color={Color}>
+            <StyledForm
+              color={Color}
+              error={!!error}
+              onSubmit={e => this.handleSubmit(e, login)}
+            >
+              <Header size="large">Next Graphql Blog</Header>
+              <Form.Field>
+                <label>Email</label>
+                <input
+                  name="email"
+                  onChange={this.handleChange}
+                  placeholder="Please enter your email"
+                  autoComplete="email"
+                  value={this.state.email}
+                />
+              </Form.Field>
 
-            <Form.Field>
-              <label>Password</label>
-              <input
-                name="password"
-                onChange={this.handleChange}
-                placeholder="Please enter your password"
-                autoComplete="password"
-                type="password"
-                value={this.state.password}
-              />
-            </Form.Field>
-            {this.state.errorMessage && (
-              <Message
-                error
-                header="Ooops!"
-                content={this.state.errorMessage}
-              />
-            )}
-            {this.state.isLoading ? (
-              <StyledLoader active inline />
-            ) : (
-              <LoginButton type="submit">Login</LoginButton>
-            )}
-          </StyledForm>
-        </Transition>
-      </Container>
+              <Form.Field>
+                <label>Password</label>
+                <input
+                  name="password"
+                  onChange={this.handleChange}
+                  placeholder="Please enter your password"
+                  autoComplete="password"
+                  type="password"
+                  value={this.state.password}
+                />
+              </Form.Field>
+              {error && (
+                <Message error header="Ooops!" content={error.message} />
+              )}
+              {loading ? (
+                <StyledLoader active inline />
+              ) : (
+                <LoginButton type="submit">Login</LoginButton>
+              )}
+            </StyledForm>
+          </Container>
+        )}
+      </Mutation>
     )
   }
 }
 
-const ALL_POSTS = gql`
-  {
-    allposts {
-      count
-      posts {
-        _id
-        name
-      }
-    }
-  }
-`
-
 const LOGIN_MUTATION = gql`
-  mutation loginMutation($email: String!, $password: String!) {
+  mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       token
       user {
@@ -149,7 +98,7 @@ const LOGIN_MUTATION = gql`
   }
 `
 
-export default graphql(LOGIN_MUTATION, { name: 'loginMutation' })(Login)
+export default Login
 
 const Container = styled.div`
   display: flex;

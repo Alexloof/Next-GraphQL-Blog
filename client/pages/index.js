@@ -6,12 +6,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Button } from 'semantic-ui-react'
 
-export default class Home extends Component {
-  static async getInitialProps(ctx) {
-    console.log('ctx', ctx)
-
-    return {}
-  }
+class Home extends Component {
   render() {
     return (
       <div>
@@ -53,6 +48,9 @@ export default class Home extends Component {
     )
   }
 }
+
+export default Home
+
 const StyledHeader = styled.h1`
   font-size: 50px;
   color: green;

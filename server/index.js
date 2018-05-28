@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import depthLimit from 'graphql-depth-limit'
 import helmet from 'helmet'
 import compression from 'compression'
+
 import resolvers from './resolvers'
 import typeDefs from './types'
 import db from './db'

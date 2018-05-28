@@ -15,6 +15,11 @@ app.prepare().then(() => {
   //   return app.render(req, res, '/posts', { id: req.params.id })
   // })
 
+  server.get('/logout', (req, res) => {
+    res.clearCookie('next-graphql.sid')
+    return res.redirect('/')
+  })
+
   server.get('*', (req, res) => {
     return handle(req, res)
   })

@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost'
 import { setContext } from 'apollo-link-context'
 import { createHttpLink } from 'apollo-link-http'
+import { onError } from 'apollo-link-error'
 import fetch from 'isomorphic-unfetch'
 
 let apolloClient = null
@@ -12,26 +13,27 @@ if (!process.browser) {
 
 const dev = process.env.NODE_ENV !== 'production'
 
-function create(initialState, { getToken }) {
-  const httpLink = createHttpLink({
+function create(initialState) {
+  const httpLink = new HttpLink({
     uri: dev ? process.env.API_URL_DEV : process.env.API_URL_PROD, // Server URL (must be absolute)
     credentials: 'include' // Additional fetch() options like `credentials` or `headers`
   })
 
-  const authLink = setContext((_, { headers }) => {
-    const token = getToken()
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : ''
-      }
-    }
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.map(({ message, locations, path }) =>
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        )
+      )
+
+    if (networkError) console.log(`[Network error]: ${networkError}`)
   })
 
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-    link: httpLink,
+    link: errorLink.concat(httpLink),
     cache: new InMemoryCache().restore(initialState || {})
   })
 }

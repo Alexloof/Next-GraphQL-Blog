@@ -22,6 +22,7 @@
     "next": "^6.0.3",
     "react": "^16.3.2",
     "react-apollo": "^2.1.4",
+    "react-cookie": "^2.1.6",
     "react-dom": "^16.3.2",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.80.2",
