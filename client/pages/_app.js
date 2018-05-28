@@ -2,6 +2,16 @@ import App, { Container } from 'next/app'
 import React from 'react'
 import withApolloClient from '../lib/with-apollo-client'
 import { ApolloProvider } from 'react-apollo'
+import Router from 'next/router'
+import NProgress from 'nprogress'
+
+import Nav from '../components/nav'
+
+Router.onRouteChangeStart = () => {
+  NProgress.start()
+}
+Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeError = () => NProgress.done()
 
 class MyApp extends App {
   render() {
@@ -9,7 +19,10 @@ class MyApp extends App {
     return (
       <Container>
         <ApolloProvider client={apolloClient}>
-          <Component {...pageProps} />
+          <div>
+            <Nav {...pageProps} />
+            <Component {...pageProps} />
+          </div>
         </ApolloProvider>
       </Container>
     )
