@@ -7,20 +7,8 @@ import { Button } from 'semantic-ui-react'
 
 class Home extends Component {
   render() {
-    return (
-      <div>
-        <div className="hero">
-          <StyledHeader>Welcome to Nextssss!</StyledHeader>
-          <Button content="Primary" primary />
-        </div>
-      </div>
-    )
+    return <div>feed</div>
   }
 }
 
 export default Home
-
-const StyledHeader = styled.h1`
-  font-size: 50px;
-  color: green;
-`
