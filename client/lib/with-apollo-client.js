@@ -3,6 +3,14 @@ import Head from 'next/head'
 import { getDataFromTree } from 'react-apollo'
 import propTypes from 'prop-types'
 
+function parseCookies(req, options = {}) {
+  if (req) {
+    return req.headers.cookie || ''
+  } else {
+    return document.cookie, options
+  }
+}
+
 export default App => {
   return class Apollo extends React.Component {
     static displayName = 'withApolloClient(App)'
@@ -13,7 +21,12 @@ export default App => {
         ctx: { req, res }
       } = ctx
       const apolloState = {}
-      const apollo = initApollo()
+      const apollo = initApollo(
+        {},
+        {
+          getToken: () => parseCookies(req)
+        }
+      )
 
       ctx.ctx.apolloClient = apollo
 
@@ -66,7 +79,10 @@ export default App => {
       // `getDataFromTree` renders the component first, the client is passed off as a property.
       // After that rendering is done using Next's normal rendering pipeline
       this.apolloClient =
-        props.apolloClient || initApollo(props.apolloState.data)
+        props.apolloClient ||
+        initApollo(props.apolloState.data, {
+          getToken: () => parseCookies()
+        })
     }
 
     render() {

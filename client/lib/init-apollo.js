@@ -12,41 +12,40 @@ if (!process.browser) {
 
 const dev = process.env.NODE_ENV !== 'production'
 
-function create(initialState) {
+function create(initialState, { getToken }) {
   const httpLink = new HttpLink({
     uri: dev ? process.env.API_URL_DEV : process.env.API_URL_PROD, // Server URL (must be absolute)
     credentials: 'include' // Additional fetch() options like `credentials` or `headers`
   })
 
-  // const errorLink = onError(({ graphQLErrors, networkError }) => {
-  //   if (graphQLErrors)
-  //     graphQLErrors.map(({ message, locations, path }) =>
-  //       console.log(
-  //         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-  //       )
-  //     )
-
-  //   if (networkError) console.log(`[Network error]: ${networkError}`)
-  // })
+  const authLink = setContext((_, { headers }) => {
+    const token = getToken()
+    return {
+      headers: {
+        ...headers,
+        Cookie: token
+      }
+    }
+  })
 
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-    link: httpLink,
+    link: authLink.concat(httpLink),
     cache: new InMemoryCache().restore(initialState || {})
   })
 }
 
-export default function initApollo(initialState) {
+export default function initApollo(initialState, options) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (!process.browser) {
-    return create(initialState)
+    return create(initialState, options)
   }
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    apolloClient = create(initialState)
+    apolloClient = create(initialState, options)
   }
 
   return apolloClient
