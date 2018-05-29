@@ -6,7 +6,6 @@ export default function withUser(WrappedComponent) {
   return class extends React.Component {
     static async getInitialProps(ctx) {
       const props = {}
-      console.log('KÖRS?')
 
       if (WrappedComponent.getInitialProps) {
         Object.assign(

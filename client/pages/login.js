@@ -58,13 +58,12 @@ class Login extends Component {
     return (
       <Mutation mutation={LOGIN_MUTATION} variables={{ email, password }}>
         {(login, { loading, error, data }) => (
-          <Container color={Color}>
+          <Container>
             <StyledForm
-              color={Color}
               error={!!error}
               onSubmit={e => this.handleSubmit(e, login)}
             >
-              <Header size="large">Next Graphql Blog</Header>
+              <Header size="large">Login</Header>
               <Form.Field>
                 <label>Email</label>
                 <input
@@ -126,29 +125,32 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background-color: ${props => props.color.primaryDark};
-  height: 100vh;
+  height: calc(200px + 40vh);
 `
 const StyledForm = styled(Form)`
   &&& {
-    background-color: ${props => props.color.primaryLight};
+    background-color: #fdfdfd;
     border-radius: 3px;
-    box-shadow: 2px 2px 4px 2px #0a0a0a6b;
-    padding: 20px;
-    width: 450px;
+    box-shadow: 0px 0px 0px 1px #75757533;
+    padding: 40px;
+    width: 550px;
     min-height: 300px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     & .field label,
     .header.large {
-      color: ${props => props.color.textGray};
+      color: #7d7d7d;
     }
   }
 `
 const LoginButton = styled(Button)`
-  width: 100%;
+  &&& {
+    width: 100%;
+    height: 40px;
+    background: #f5ca66;
+    margin: 15px 0px;
+  }
 `
 const StyledLoader = styled(Loader)`
   align-self: center;

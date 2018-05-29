@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Head from '../components/head'
 import Nav from '../components/nav'
 import React, { Component } from 'react'
 
@@ -10,7 +9,6 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Head title="Home" />
         <div className="hero">
           <StyledHeader>Welcome to Nextssss!</StyledHeader>
           <Button content="Primary" primary />

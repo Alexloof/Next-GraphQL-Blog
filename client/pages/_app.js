@@ -1,12 +1,14 @@
-import App, { Container } from 'next/app'
+import App, { Container as NextContainer } from 'next/app'
 import React, { Component } from 'react'
 import withApolloClient from '../lib/with-apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import Router from 'next/router'
 import NProgress from 'nprogress'
+import { Container as StyledContainer } from 'semantic-ui-react'
 
 import isAuth from '../lib/isAuth'
 
+import Head from '../components/head'
 import Nav from '../components/nav'
 
 import ContextProvider from '../context'
@@ -36,16 +38,17 @@ class NextApp extends App {
       client: apolloClient
     }
     return (
-      <Container>
+      <NextContainer>
         <ContextProvider>
           <ApolloProvider client={apolloClient}>
-            <div>
+            <StyledContainer>
+              <Head title="Next Graphql - Blogg" />
               <Nav {...propsWithClient} />
               <Component {...propsWithClient} />
-            </div>
+            </StyledContainer>
           </ApolloProvider>
         </ContextProvider>
-      </Container>
+      </NextContainer>
     )
   }
 }
