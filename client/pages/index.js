@@ -12,7 +12,7 @@ import ALL_POSTS from '../api/queries/post/allPosts'
 class Home extends Component {
   render() {
     return (
-      <Query query={ALL_POSTS}>
+      <Query query={ALL_POSTS} variables={{ sort: '-createdAt' }}>
         {({ loading, error, data: { allPosts } }) => {
           if (loading) return 'Loading...'
           if (error) return `Error! ${error.message}`
@@ -38,6 +38,7 @@ const FeedList = styled.div`
   padding: 40px;
   .ui.card {
     margin: 15px;
+    width: 310px;
   }
   .ui.card:first-child {
     margin-top: 15px;

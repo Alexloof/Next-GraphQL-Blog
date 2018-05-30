@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-  query allPosts {
-    allPosts {
+  query allPosts($filter: String, $offset: Int, $limit: Int, $sort: String) {
+    allPosts(filter: $filter, offset: $offset, limit: $limit, sort: $sort) {
       count
       posts {
         _id
@@ -17,6 +17,11 @@ export default gql`
         }
         comments {
           _id
+          createdAt
+          text
+          commentedBy {
+            name
+          }
         }
       }
     }
