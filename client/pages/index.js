@@ -1,28 +1,34 @@
-import Link from 'next/link'
-import Nav from '../components/nav'
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 
-import styled from 'styled-components'
-import { Button } from 'semantic-ui-react'
-import PostCard from '../components/PostCard'
+import FeedList from '../components/FeedList'
 
 import ALL_POSTS from '../api/queries/post/allPosts'
 
 class Home extends Component {
+  subscribeToNewLikes = subscribeToMore => {
+    return subscribeToMore({
+      document: NEW_LIKE_SUB,
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev
+        console.log('TACK FÖR LIKE', subscriptionData.data)
+      }
+    })
+  }
   render() {
     return (
       <Query query={ALL_POSTS} variables={{ sort: '-createdAt' }}>
-        {({ loading, error, data: { allPosts } }) => {
+        {({ loading, error, data: { allPosts }, subscribeToMore }) => {
           if (loading) return 'Loading...'
           if (error) return `Error! ${error.message}`
-
           return (
-            <FeedList>
-              {allPosts.posts.map(post => (
-                <PostCard key={post._id} {...post} />
-              ))}
-            </FeedList>
+            <FeedList
+              posts={allPosts.posts}
+              subscribeToNewLikes={() =>
+                this.subscribeToNewLikes(subscribeToMore)
+              }
+            />
           )
         }}
       </Query>
@@ -30,20 +36,12 @@ class Home extends Component {
   }
 }
 
-export default Home
-
-const FeedList = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  padding: 40px;
-  .ui.card {
-    margin: 15px;
-    width: 310px;
-  }
-  .ui.card:first-child {
-    margin-top: 15px;
-  }
-  .ui.card:last-child {
-    margin-bottom: 15px;
+const NEW_LIKE_SUB = gql`
+  subscription newLike {
+    newLike {
+      _id
+    }
   }
 `
+
+export default Home

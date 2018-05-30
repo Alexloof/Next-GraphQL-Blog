@@ -17,20 +17,17 @@ export default function withUser(WrappedComponent) {
       return props
     }
     render() {
-      console.log(this.props)
       return (
         <Context.Consumer>
           {context => {
-            if (context) {
-              return (
-                <WrappedComponent
-                  {...this.props}
-                  user={context.state.user}
-                  setUser={context.actions.setUser}
-                  clearUser={context.actions.clearUser}
-                />
-              )
-            }
+            return (
+              <WrappedComponent
+                {...this.props}
+                user={context ? context.state.user : ''}
+                setUser={context ? context.actions.setUser : ''}
+                clearUser={context ? context.actions.clearUser : ''}
+              />
+            )
           }}
         </Context.Consumer>
       )

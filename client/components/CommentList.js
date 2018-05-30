@@ -48,6 +48,7 @@ class CommentList extends Component {
             createdAt: new Date(),
             text: this.state.input,
             commentedBy: {
+              _id: user._id,
               __typename: 'User',
               name: user.name
             }
@@ -61,6 +62,9 @@ class CommentList extends Component {
 
           // takes a reference of the post we want
           const updatedPost = allPosts.posts.find(post => post._id === postId)
+
+          // mutate the newly created post with en user_id so it matches the query
+          commentPost.commentedBy._id = user._id
 
           // mutates the reference
           updatedPost.comments = [...updatedPost.comments, commentPost]

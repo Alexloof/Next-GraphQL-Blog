@@ -10,6 +10,7 @@ export default gql`
         name
         content
         postedBy {
+          _id
           name
         }
         likes {
@@ -20,6 +21,7 @@ export default gql`
           createdAt
           text
           commentedBy {
+            _id
             name
           }
         }

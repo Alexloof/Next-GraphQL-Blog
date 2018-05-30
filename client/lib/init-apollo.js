@@ -1,6 +1,8 @@
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost'
 import { setContext } from 'apollo-link-context'
-//import { onError } from 'apollo-link-error'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
+import { split } from 'apollo-link'
 import fetch from 'isomorphic-unfetch'
 
 let apolloClient = null
@@ -28,10 +30,32 @@ function create(initialState, { getToken }) {
     }
   })
 
+  const httpLinkWithAuthToken = authLink.concat(httpLink)
+
+  const wsLink = process.browser
+    ? new WebSocketLink({
+        uri: `ws://localhost:4000/`,
+        options: {
+          reconnect: true
+        }
+      })
+    : null
+
+  const link = process.browser
+    ? split(
+        ({ query }) => {
+          const { kind, operation } = getMainDefinition(query)
+          return kind === 'OperationDefinition' && operation === 'subscription'
+        },
+        wsLink,
+        httpLinkWithAuthToken
+      )
+    : httpLinkWithAuthToken
+
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-    link: authLink.concat(httpLink),
+    link: link,
     cache: new InMemoryCache().restore(initialState || {})
   })
 }

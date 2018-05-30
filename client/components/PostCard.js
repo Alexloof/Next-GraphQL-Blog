@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import ALL_POSTS from '../api/queries/post/allPosts'
 import LIKE_POST from '../api/mutations/like/likePost'
 
+import withUser from '../lib/withUser'
 import CommentList from './CommentList'
 
 const fakeId = Math.round(Math.random() * -1000000)
@@ -31,7 +32,8 @@ class PostCard extends Component {
       postedBy,
       likes,
       comments,
-      createdAt
+      createdAt,
+      user
     } = this.props
 
     return (
@@ -42,7 +44,16 @@ class PostCard extends Component {
           __typename: 'Mutation',
           likePost: {
             __typename: 'Like',
-            _id: fakeId
+            _id: fakeId,
+            post: {
+              __typename: 'Post',
+              _id: _id
+            },
+            likedBy: {
+              __typename: 'User',
+              _id: user._id,
+              name: user.name
+            }
           }
         }}
         update={(cache, { data: { likePost } }) => {
@@ -106,4 +117,4 @@ const BottomSection = styled(Card.Content)`
   justify-content: space-between;
 `
 
-export default PostCard
+export default withUser(PostCard)
