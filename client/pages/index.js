@@ -12,7 +12,28 @@ class Home extends Component {
       document: NEW_LIKE_SUB,
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
-        console.log('TACK FÖR LIKE', subscriptionData.data)
+        const newLike = subscriptionData.data.newLike
+        // console.log(prev.allPosts.posts)
+        // console.log(newLike.post._id)
+        const pickPost = prev.allPosts.posts.find(
+          post => post._id === newLike.post._id
+        )
+        const updatedPost = { ...pickPost }
+        updatedPost.likes = [...updatedPost.likes, updatedPost]
+
+        const test = {
+          ...prev,
+          allPosts: {
+            count: prev.allPosts.count,
+            posts: {
+              ...prev.allPosts.posts,
+              updatedPost
+            }
+          }
+        }
+        console.log(prev)
+        console.log(test)
+        return test
       }
     })
   }
@@ -40,6 +61,9 @@ const NEW_LIKE_SUB = gql`
   subscription newLike {
     newLike {
       _id
+      post {
+        _id
+      }
     }
   }
 `
