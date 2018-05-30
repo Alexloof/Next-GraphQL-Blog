@@ -13,27 +13,37 @@ class Home extends Component {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
         const newLike = subscriptionData.data.newLike
-        // console.log(prev.allPosts.posts)
-        // console.log(newLike.post._id)
-        const pickPost = prev.allPosts.posts.find(
-          post => post._id === newLike.post._id
-        )
-        const updatedPost = { ...pickPost }
-        updatedPost.likes = [...updatedPost.likes, updatedPost]
 
-        const test = {
-          ...prev,
-          allPosts: {
-            count: prev.allPosts.count,
-            posts: {
-              ...prev.allPosts.posts,
-              updatedPost
+        const posts = [...prev.allPosts.posts]
+
+        let likeExist = false
+        posts.map(post => {
+          if (post._id === newLike.post._id) {
+            post.likes.map(like => {
+              if (like._id === newLike._id) {
+                likeExist = true
+              }
+            })
+          }
+        })
+
+        if (!likeExist) {
+          const newPosts = posts.map(
+            post =>
+              post._id === newLike.post._id
+                ? { ...post, likes: [...post.likes, newLike] }
+                : post
+          )
+
+          return {
+            ...prev,
+            allPosts: {
+              __typename: 'PostFeed',
+              count: prev.allPosts.count,
+              posts: newPosts
             }
           }
         }
-        console.log(prev)
-        console.log(test)
-        return test
       }
     })
   }

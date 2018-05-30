@@ -65,8 +65,14 @@ class PostCard extends Component {
           // takes a reference of the post we want
           const updatedPost = allPosts.posts.find(post => post._id === _id)
 
-          // mutates the reference
-          updatedPost.likes = [...updatedPost.likes, likePost]
+          const likeExist = updatedPost.likes.filter(
+            like => like._id === likePost._id
+          )
+
+          if (likeExist.length === 0) {
+            // mutates the reference
+            updatedPost.likes = [...updatedPost.likes, likePost]
+          }
 
           cache.writeQuery({
             query: ALL_POSTS,
