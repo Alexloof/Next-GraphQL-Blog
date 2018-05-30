@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { graphql, compose, Query, Mutation } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 import styled from 'styled-components'
