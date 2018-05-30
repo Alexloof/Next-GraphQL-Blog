@@ -4,11 +4,11 @@ export default async (parent, { postId }, ctx) => {
 
     const likeModel = ctx.db.model('like')
 
-    const likeExist = await likeModel
-      .findOne({ likedBy: ctx.user, post: postId })
-      .exec()
+    // const likeExist = await likeModel
+    //   .findOne({ likedBy: ctx.user, post: postId })
+    //   .exec()
 
-    if (likeExist) throw new Error('You have already liked this post')
+    // if (likeExist) throw new Error('You have already liked this post')
 
     const like = await likeModel.create({
       likedBy: ctx.user,

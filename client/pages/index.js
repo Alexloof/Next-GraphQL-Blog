@@ -2,11 +2,12 @@ import Link from 'next/link'
 import Nav from '../components/nav'
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
 
 import styled from 'styled-components'
 import { Button } from 'semantic-ui-react'
 import PostCard from '../components/PostCard'
+
+import ALL_POSTS from '../api/queries/post/allPosts'
 
 class Home extends Component {
   render() {
@@ -28,29 +29,6 @@ class Home extends Component {
     )
   }
 }
-
-const ALL_POSTS = gql`
-  query allPosts {
-    allPosts {
-      count
-      posts {
-        _id
-        createdAt
-        name
-        content
-        postedBy {
-          name
-        }
-        likes {
-          _id
-        }
-        comments {
-          _id
-        }
-      }
-    }
-  }
-`
 
 export default Home
 
