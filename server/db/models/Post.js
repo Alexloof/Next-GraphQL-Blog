@@ -4,12 +4,12 @@ const postSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     required: true,
-    default: new Date()
+    default: Date.now
   },
   updatedAt: {
     type: Date,
     required: true,
-    default: new Date()
+    default: Date.now
   },
   name: {
     type: String,
