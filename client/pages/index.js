@@ -25,20 +25,66 @@ class Home extends Component {
 
   render() {
     return (
-      <Query query={ALL_POSTS} variables={{ sort: '-createdAt' }}>
-        {({ loading, error, data: { allPosts }, subscribeToMore }) => {
+      <Query
+        query={ALL_POSTS}
+        variables={{ sort: '-createdAt', limit: 5, offset: 0 }}
+        notifyOnNetworkStatusChange
+      >
+        {({
+          loading,
+          error,
+          data: { allPosts },
+          subscribeToMore,
+          fetchMore
+        }) => {
           if (loading) return 'Loading...'
           if (error) return `Error! ${error.message}`
           return (
-            <FeedList
-              posts={allPosts.posts}
-              subscribeToNewLikes={() =>
-                this.subscribeToNewLikes(subscribeToMore)
-              }
-              subscribeToNewComments={() =>
-                this.subscribeToNewComments(subscribeToMore)
-              }
-            />
+            <>
+              <FeedList
+                posts={allPosts.posts}
+                subscribeToNewLikes={() =>
+                  this.subscribeToNewLikes(subscribeToMore)
+                }
+                subscribeToNewComments={() =>
+                  this.subscribeToNewComments(subscribeToMore)
+                }
+              />
+              {allPosts.count !== allPosts.posts.length && (
+                <a
+                  onClick={() =>
+                    fetchMore({
+                      variables: { offset: allPosts.posts.length },
+                      updateQuery: (prev, { fetchMoreResult }) => {
+                        if (!fetchMoreResult) return prev
+                        const newPosts = [
+                          ...prev.allPosts.posts,
+                          ...fetchMoreResult.allPosts.posts
+                        ]
+
+                        // remove duplicate posts that can occur during a newly
+                        // created post from another user
+                        const updatedPosts = newPosts.filter(
+                          (post, index, self) =>
+                            index === self.findIndex(t => t._id === post._id)
+                        )
+
+                        return {
+                          ...prev,
+                          allPosts: {
+                            __typename: 'PostFeed',
+                            count: prev.allPosts.count,
+                            posts: updatedPosts
+                          }
+                        }
+                      }
+                    })
+                  }
+                >
+                  fetchMore
+                </a>
+              )}
+            </>
           )
         }}
       </Query>
