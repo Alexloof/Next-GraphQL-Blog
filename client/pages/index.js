@@ -1,52 +1,28 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
 
 import FeedList from '../components/FeedList'
 
 import ALL_POSTS from '../api/queries/post/allPosts'
+import { NEW_LIKE_SUB, newLikeUpdate } from '../api/subscriptions/newLike'
+import {
+  NEW_COMMENT_SUB,
+  newCommentUpdate
+} from '../api/subscriptions/newComment'
 
 class Home extends Component {
-  subscribeToNewLikes = subscribeToMore => {
-    return subscribeToMore({
+  subscribeToNewLikes = subscribeToMore =>
+    subscribeToMore({
       document: NEW_LIKE_SUB,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev
-        const newLike = subscriptionData.data.newLike
-
-        const posts = [...prev.allPosts.posts]
-
-        let likeExist = false
-        posts.map(post => {
-          if (post._id === newLike.post._id) {
-            post.likes.map(like => {
-              if (like._id === newLike._id) {
-                likeExist = true
-              }
-            })
-          }
-        })
-
-        if (!likeExist) {
-          const newPosts = posts.map(
-            post =>
-              post._id === newLike.post._id
-                ? { ...post, likes: [...post.likes, newLike] }
-                : post
-          )
-
-          return {
-            ...prev,
-            allPosts: {
-              __typename: 'PostFeed',
-              count: prev.allPosts.count,
-              posts: newPosts
-            }
-          }
-        }
-      }
+      updateQuery: (prev, result) => newLikeUpdate(prev, result)
     })
-  }
+
+  subscribeToNewComments = subscribeToMore =>
+    subscribeToMore({
+      document: NEW_COMMENT_SUB,
+      updateQuery: (prev, result) => newCommentUpdate(prev, result)
+    })
+
   render() {
     return (
       <Query query={ALL_POSTS} variables={{ sort: '-createdAt' }}>
@@ -59,6 +35,9 @@ class Home extends Component {
               subscribeToNewLikes={() =>
                 this.subscribeToNewLikes(subscribeToMore)
               }
+              subscribeToNewComments={() =>
+                this.subscribeToNewComments(subscribeToMore)
+              }
             />
           )
         }}
@@ -66,16 +45,5 @@ class Home extends Component {
     )
   }
 }
-
-const NEW_LIKE_SUB = gql`
-  subscription newLike {
-    newLike {
-      _id
-      post {
-        _id
-      }
-    }
-  }
-`
 
 export default Home

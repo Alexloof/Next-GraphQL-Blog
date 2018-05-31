@@ -7,9 +7,10 @@ import { Mutation } from 'react-apollo'
 import withUser from '../lib/withUser'
 
 import ALL_POSTS from '../api/queries/post/allPosts'
-import COMMENT_POST from '../api/mutations/comment/commentPost'
-
-const fakeId = Math.round(Math.random() * -1000000)
+import {
+  COMMENT_POST,
+  commentPostOptions
+} from '../api/mutations/comment/commentPost'
 
 class CommentList extends Component {
   state = {
@@ -21,7 +22,7 @@ class CommentList extends Component {
     const { input } = this.state
     if (!input) return
 
-    commentPost()
+    commentPost(commentPostOptions(this.props, input))
 
     this.setState({
       input: ''
@@ -40,46 +41,6 @@ class CommentList extends Component {
       <Mutation
         mutation={COMMENT_POST}
         variables={{ postId: postId, text: this.state.input }}
-        optimisticResponse={{
-          __typename: 'Mutation',
-          commentPost: {
-            __typename: 'Comment',
-            _id: fakeId,
-            createdAt: new Date(),
-            text: this.state.input,
-            commentedBy: {
-              _id: user._id,
-              __typename: 'User',
-              name: user.name
-            }
-          }
-        }}
-        update={(cache, { data: { commentPost } }) => {
-          const { allPosts } = cache.readQuery({
-            query: ALL_POSTS,
-            variables: { sort: '-createdAt' }
-          })
-
-          // takes a reference of the post we want
-          const updatedPost = allPosts.posts.find(post => post._id === postId)
-
-          // mutate the newly created post with en user_id so it matches the query
-          commentPost.commentedBy._id = user._id
-
-          // mutates the reference
-          updatedPost.comments = [...updatedPost.comments, commentPost]
-
-          cache.writeQuery({
-            query: ALL_POSTS,
-            data: {
-              allPosts: {
-                __typename: 'PostFeed',
-                count: allPosts.count++,
-                posts: [...allPosts.posts]
-              }
-            }
-          })
-        }}
       >
         {(commentPost, { loading, error, data }) => (
           <CommentContainer>

@@ -6,6 +6,7 @@ import PostCard from './PostCard'
 class FeedList extends Component {
   componentDidMount() {
     this.props.subscribeToNewLikes()
+    this.props.subscribeToNewComments()
   }
 
   render() {

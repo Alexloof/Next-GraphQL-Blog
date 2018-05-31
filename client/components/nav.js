@@ -1,4 +1,3 @@
-import Head from './head'
 import Link from 'next/link'
 import Router from 'next/router'
 import React, { Component } from 'react'
@@ -23,7 +22,7 @@ class Nav extends Component {
 
     return (
       <nav>
-        <Menu pointing secondary>
+        <StyledMenu pointing secondary>
           <Link prefetch href="/">
             <StyledLink>Feed</StyledLink>
           </Link>
@@ -45,17 +44,26 @@ class Nav extends Component {
             )}
             {isAuth && <StyledLink onClick={this.logout}>Logout</StyledLink>}
           </Menu.Menu>
-        </Menu>
+        </StyledMenu>
       </nav>
     )
   }
 }
+
+const StyledMenu = styled(Menu)`
+  &&& {
+    border-bottom: 2px solid #ffd045;
+    padding: 0 15px;
+  }
+`
 
 const StyledLink = styled.a`
   color: #5f5f5f;
   line-height: 70px;
   padding: 0 20px;
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 `
 
 export default Nav

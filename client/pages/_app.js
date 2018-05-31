@@ -8,8 +8,8 @@ import { Container as StyledContainer } from 'semantic-ui-react'
 
 import isAuth from '../lib/isAuth'
 
-import Head from '../components/head'
-import Nav from '../components/nav'
+import Head from '../components/HeadData'
+import Nav from '../components/Nav'
 
 import ContextProvider from '../context'
 
