@@ -2,6 +2,8 @@ import gql from 'graphql-tag'
 
 import ALL_POSTS from '../../queries/post/allPosts'
 
+import { POSTS_LIMIT } from '../../constants'
+
 export const LIKE_POST = gql`
   mutation likePost($postId: ID!) {
     likePost(postId: $postId) {
@@ -41,7 +43,7 @@ export const likePostOptions = props => {
     update: (cache, { data: { likePost } }) => {
       const { allPosts } = cache.readQuery({
         query: ALL_POSTS,
-        variables: { sort: '-createdAt' }
+        variables: { offset: 0, limit: POSTS_LIMIT, sort: '-createdAt' }
       })
 
       // takes a reference of the post we want

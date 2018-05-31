@@ -2969,6 +2969,10 @@ lodash.camelcase@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
 
+lodash.clone@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.clone/-/lodash.clone-4.5.0.tgz#195870450f5a13192478df4bc3d23d2dea1907b6"
+
 lodash.isobject@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/lodash.isobject/-/lodash.isobject-3.0.2.tgz#3c8fb8d5b5bf4bf90ae06e14f2a530a4ed935e1d"
@@ -4165,6 +4169,12 @@ react-apollo@^2.1.4:
     lodash "4.17.5"
     prop-types "^15.6.0"
 
+react-chatview@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/react-chatview/-/react-chatview-0.2.5.tgz#f5bb70ed2ec6d8a7f96b64883037ff19174c8e49"
+  dependencies:
+    lodash.clone "^4.5.0"
+
 react-cookie@^2.1.6:
   version "2.1.6"
   resolved "https://registry.yarnpkg.com/react-cookie/-/react-cookie-2.1.6.tgz#3a3d59358ae8d3f19d6ebb4c6e8971db342a4c19"
@@ -4192,6 +4202,10 @@ react-hot-loader@4.1.3:
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.2"
     shallowequal "^1.0.2"
+
+react-infinite-scroll-component@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-4.1.0.tgz#464969fb742aa3c76c7dff863eb7003444efc808"
 
 react-is@^16.3.1:
   version "16.4.0"

@@ -10,6 +10,8 @@ import {
   newCommentUpdate
 } from '../api/subscriptions/newComment'
 
+import { POSTS_LIMIT } from '../api/constants'
+
 class Home extends Component {
   subscribeToNewLikes = subscribeToMore =>
     subscribeToMore({
@@ -23,22 +25,44 @@ class Home extends Component {
       updateQuery: (prev, result) => newCommentUpdate(prev, result)
     })
 
+  fetchMorePosts = (fetchMore, offset) =>
+    fetchMore({
+      variables: { offset },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev
+        const newPosts = [
+          ...prev.allPosts.posts,
+          ...fetchMoreResult.allPosts.posts
+        ]
+
+        // remove duplicate posts that can occur during a newly
+        // created post from another user
+        const updatedPosts = newPosts.filter(
+          (post, index, self) =>
+            index === self.findIndex(t => t._id === post._id)
+        )
+
+        return {
+          ...prev,
+          allPosts: {
+            __typename: 'PostFeed',
+            count: prev.allPosts.count,
+            posts: updatedPosts
+          }
+        }
+      }
+    })
+
   render() {
     return (
       <Query
         query={ALL_POSTS}
-        variables={{ sort: '-createdAt', limit: 5, offset: 0 }}
+        variables={{ sort: '-createdAt', limit: POSTS_LIMIT, offset: 0 }}
         notifyOnNetworkStatusChange
       >
-        {({
-          loading,
-          error,
-          data: { allPosts },
-          subscribeToMore,
-          fetchMore
-        }) => {
-          if (loading) return 'Loading...'
-          if (error) return `Error! ${error.message}`
+        {({ loading, subscribeToMore, fetchMore, data: { allPosts } }) => {
+          const postLength = allPosts.posts.length
+
           return (
             <>
               <FeedList
@@ -49,41 +73,10 @@ class Home extends Component {
                 subscribeToNewComments={() =>
                   this.subscribeToNewComments(subscribeToMore)
                 }
+                hasMorePosts={allPosts.count !== postLength}
+                fetchMore={() => this.fetchMorePosts(fetchMore, postLength)}
               />
-              {allPosts.count !== allPosts.posts.length && (
-                <a
-                  onClick={() =>
-                    fetchMore({
-                      variables: { offset: allPosts.posts.length },
-                      updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!fetchMoreResult) return prev
-                        const newPosts = [
-                          ...prev.allPosts.posts,
-                          ...fetchMoreResult.allPosts.posts
-                        ]
-
-                        // remove duplicate posts that can occur during a newly
-                        // created post from another user
-                        const updatedPosts = newPosts.filter(
-                          (post, index, self) =>
-                            index === self.findIndex(t => t._id === post._id)
-                        )
-
-                        return {
-                          ...prev,
-                          allPosts: {
-                            __typename: 'PostFeed',
-                            count: prev.allPosts.count,
-                            posts: updatedPosts
-                          }
-                        }
-                      }
-                    })
-                  }
-                >
-                  fetchMore
-                </a>
-              )}
+              {loading && <p>Loading...</p>}
             </>
           )
         }}

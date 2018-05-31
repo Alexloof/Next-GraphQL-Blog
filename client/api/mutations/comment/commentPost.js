@@ -2,6 +2,8 @@ import gql from 'graphql-tag'
 
 import ALL_POSTS from '../../queries/post/allPosts'
 
+import { POSTS_LIMIT } from '../../constants'
+
 export const COMMENT_POST = gql`
   mutation commentPost($postId: ID!, $text: String) {
     commentPost(postId: $postId, text: $text) {
@@ -45,7 +47,7 @@ export const commentPostOptions = (props, input) => {
     update: (cache, { data: { commentPost } }) => {
       const { allPosts } = cache.readQuery({
         query: ALL_POSTS,
-        variables: { sort: '-createdAt' }
+        variables: { offset: 0, limit: POSTS_LIMIT, sort: '-createdAt' }
       })
 
       // takes a reference of the post we want
@@ -68,7 +70,7 @@ export const commentPostOptions = (props, input) => {
         data: {
           allPosts: {
             __typename: 'PostFeed',
-            count: allPosts.count++,
+            count: allPosts.count,
             posts: [...allPosts.posts]
           }
         }

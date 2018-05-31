@@ -12,7 +12,7 @@ import {
   Message
 } from 'semantic-ui-react'
 
-import { WRITE_POST } from '../api/mutations/post/writePost'
+import { WRITE_POST, writePostOptions } from '../api/mutations/post/writePost'
 
 class NewPost extends Component {
   state = {
@@ -29,7 +29,7 @@ class NewPost extends Component {
     e.preventDefault()
 
     try {
-      const { data } = await writePost()
+      const { data } = await writePost(writePostOptions())
 
       Router.push('/')
     } catch (error) {

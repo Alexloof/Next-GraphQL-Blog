@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 import PostCard from './PostCard'
 
@@ -12,7 +13,14 @@ class FeedList extends Component {
   render() {
     return (
       <Container>
-        {this.props.posts.map(post => <PostCard key={post._id} {...post} />)}
+        <InfiniteScroll
+          dataLength={this.props.posts.length}
+          next={this.props.fetchMore}
+          hasMore={this.props.hasMorePosts}
+          style={{ display: 'flex', flexWrap: 'wrap' }}
+        >
+          {this.props.posts.map(post => <PostCard key={post._id} {...post} />)}
+        </InfiniteScroll>
       </Container>
     )
   }
