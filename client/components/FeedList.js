@@ -8,6 +8,7 @@ class FeedList extends Component {
   componentDidMount() {
     this.props.subscribeToNewLikes()
     this.props.subscribeToNewComments()
+    this.props.subscribeToNewPosts()
   }
 
   render() {
