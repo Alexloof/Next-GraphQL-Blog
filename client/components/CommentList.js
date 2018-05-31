@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Comment, Form, Header, Input } from 'semantic-ui-react'
+import { Comment, Input } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import { Mutation } from 'react-apollo'

@@ -27,11 +27,16 @@ class Nav extends Component {
             <StyledLink>Feed</StyledLink>
           </Link>
           {isAuth && (
-            <Link prefetch href="/user">
-              <StyledLink>User</StyledLink>
+            <Link prefetch href="/new-post">
+              <StyledLink>New post</StyledLink>
             </Link>
           )}
           <Menu.Menu position="right">
+            {isAuth && (
+              <Link prefetch href="/user">
+                <StyledLink>User</StyledLink>
+              </Link>
+            )}
             {!isAuth && (
               <Link prefetch href="/login">
                 <StyledLink>Login</StyledLink>

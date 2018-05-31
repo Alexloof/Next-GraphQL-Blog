@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import Router from 'next/router'
 import styled from 'styled-components'
 import Link from 'next/link'
 
 import withUser from '../lib/withUser'
-
-import { Color } from '../styles/variables'
 
 import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
 
@@ -54,7 +52,7 @@ class Login extends Component {
   }
 
   render() {
-    const { email, password, errorShake } = this.state
+    const { email, password } = this.state
     return (
       <Mutation mutation={LOGIN_MUTATION} variables={{ email, password }}>
         {(login, { loading, error, data }) => (

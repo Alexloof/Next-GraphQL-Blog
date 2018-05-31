@@ -10,8 +10,6 @@ import { LIKE_POST, likePostOptions } from '../api/mutations/like/likePost'
 import withUser from '../lib/withUser'
 import CommentList from './CommentList'
 
-const fakeId = Math.round(Math.random() * -1000000)
-
 class PostCard extends Component {
   state = {
     showComments: false
@@ -56,6 +54,7 @@ class PostCard extends Component {
                 {likes.length} Likes
               </a>
             </BottomSection>
+
             {showComments && <CommentList comments={comments} postId={_id} />}
           </StyledCard>
         )}
@@ -66,7 +65,7 @@ class PostCard extends Component {
 
 const StyledCard = styled(Card)`
   &&& {
-    height: ${props => (props.props.showComments ? 'auto' : '340px')};
+    height: ${props => (props.props.showComments ? 'auto' : '325px')};
     box-shadow: 0px 3px 25px 2px #00000014;
   }
 `
