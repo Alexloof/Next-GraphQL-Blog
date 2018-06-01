@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 import styled from 'styled-components'
+import { Transition, animated } from 'react-spring'
 
 import FeedList from '../components/FeedList'
+import LoadPendingButton from '../components/LoadPendingButton'
 
 import ALL_POSTS from '../api/queries/post/allPosts'
 import { NEW_LIKE_SUB, newLikeUpdate } from '../api/subscriptions/newLike'
@@ -35,11 +37,12 @@ class Home extends Component {
     subscribeToMore({
       document: NEW_POST_SUB,
       updateQuery: (prev, { subscriptionData }) => {
-        console.log('NYTT POST FRÅN SUB', subscriptionData.data)
         if (!subscriptionData.data) return prev
+
         const newPost = { ...subscriptionData.data.newPost }
         newPost.likes = []
         newPost.comments = []
+
         this.setState(prevState => {
           return {
             newPosts: [newPost, ...prevState.newPosts]
@@ -117,11 +120,22 @@ class Home extends Component {
           const pendingPostLength = this.state.newPosts.length
           return (
             <>
-              {!!pendingPostLength && (
-                <LoadPendingButton onClick={this.loadPendingPosts}>
-                  Load {pendingPostLength} new post...
-                </LoadPendingButton>
-              )}
+              <Transition
+                from={{ top: '-50px' }}
+                enter={{ top: '50px' }}
+                leave={{ top: '-50px' }}
+              >
+                {!!pendingPostLength &&
+                  (style => (
+                    <LoadPendingButton
+                      style={{ ...style }}
+                      onClick={this.loadPendingPosts}
+                    >
+                      Load {pendingPostLength} new post...
+                    </LoadPendingButton>
+                  ))}
+              </Transition>
+
               <FeedList
                 posts={allPosts.posts}
                 subscribeToNewLikes={() =>
@@ -136,6 +150,8 @@ class Home extends Component {
                 hasMorePosts={allPosts.count !== postLength}
                 fetchMore={() => this.fetchMorePosts(fetchMore, postLength)}
               />
+
+              {/*fix nice loading spinner here */}
               {loading && <p>Loading...</p>}
             </>
           )
@@ -144,11 +160,5 @@ class Home extends Component {
     )
   }
 }
-
-const LoadPendingButton = styled.div`
-  width: 100px;
-  height: 45px;
-  background: green;
-`
 
 export default Home
