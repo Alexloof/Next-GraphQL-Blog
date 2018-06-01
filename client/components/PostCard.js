@@ -67,6 +67,8 @@ const StyledCard = styled(Card)`
   &&& {
     height: ${props => (props.props.showComments ? 'auto' : '325px')};
     box-shadow: 0px 3px 25px 2px #00000014;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
   }
 `
 

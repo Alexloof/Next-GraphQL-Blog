@@ -103,6 +103,7 @@ class Home extends Component {
         }
       }
     })
+    window.scroll(0, 0)
     this.setState({
       newPosts: []
     })

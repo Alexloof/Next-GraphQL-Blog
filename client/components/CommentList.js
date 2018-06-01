@@ -3,6 +3,7 @@ import { Comment, Input } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
 import { Mutation } from 'react-apollo'
+import ReactDOM from 'react-dom'
 
 import withUser from '../lib/withUser'
 
@@ -15,6 +16,14 @@ import {
 class CommentList extends Component {
   state = {
     input: ''
+  }
+
+  componentDidMount() {
+    this.scrollToBottom()
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom()
   }
 
   writeComment = (e, commentPost) => {
@@ -35,6 +44,11 @@ class CommentList extends Component {
     })
   }
 
+  scrollToBottom = () => {
+    const messagesContainer = ReactDOM.findDOMNode(this.messageList)
+    messagesContainer.scrollTop = messagesContainer.scrollHeight
+  }
+
   render() {
     const { comments, postId, user } = this.props
     return (
@@ -44,23 +58,36 @@ class CommentList extends Component {
       >
         {(commentPost, { loading, error, data }) => (
           <CommentContainer>
-            {comments.map(comment => {
-              return (
-                <Comment key={comment._id}>
-                  <Comment.Content>
-                    <Comment.Author as="a">
-                      {comment.commentedBy.name}
-                    </Comment.Author>
-                    <Comment.Metadata>
-                      <div>{moment(new Date(comment.createdAt)).fromNow()}</div>
-                    </Comment.Metadata>
-                    <Comment.Text style={{ height: '20px' }}>
-                      {comment.text}
-                    </Comment.Text>
-                  </Comment.Content>
-                </Comment>
-              )
-            })}
+            <StyledList
+              ref={node => {
+                this.messageList = node
+              }}
+            >
+              {comments.map(comment => {
+                return (
+                  <Comment key={comment._id}>
+                    <Comment.Content>
+                      <Comment.Author as="a">
+                        {comment.commentedBy.name}
+                      </Comment.Author>
+                      <Comment.Metadata>
+                        <div>
+                          {moment(new Date(comment.createdAt)).fromNow()}
+                        </div>
+                      </Comment.Metadata>
+                      <Comment.Text>{comment.text}</Comment.Text>
+                    </Comment.Content>
+                  </Comment>
+                )
+              })}
+              <div
+                style={{ float: 'left', clear: 'both' }}
+                ref={el => {
+                  this.messagesEnd = el
+                }}
+              />
+            </StyledList>
+
             <form onSubmit={e => this.writeComment(e, commentPost)}>
               <Input
                 action="Comment"
@@ -80,7 +107,19 @@ export default withUser(CommentList)
 
 const CommentContainer = styled(Comment.Group)`
   &&& {
-    padding: 15px;
+    padding: 14px;
     margin: 0;
+    position: absolute;
+    background: #ffffff;
+    border-radius: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 7px 8px 0px #00000047;
+    top: 100%;
+    z-index: 10;
   }
+`
+
+const StyledList = styled.div`
+  overflow-y: auto;
+  max-height: 180px;
 `
