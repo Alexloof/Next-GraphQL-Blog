@@ -31,6 +31,7 @@ class NextApp extends App {
 
     return { pageProps: { ...pageProps, isAuth: isAuthenticated } }
   }
+
   render() {
     const { Component, pageProps, apolloClient } = this.props
     const propsWithClient = {

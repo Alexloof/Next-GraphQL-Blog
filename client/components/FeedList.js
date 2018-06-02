@@ -31,7 +31,10 @@ class FeedList extends Component {
             typeName="ul"
             style={{
               position: 'relative',
-              padding: 0
+              padding: 0,
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center'
             }}
           >
             {!!posts.length ? (

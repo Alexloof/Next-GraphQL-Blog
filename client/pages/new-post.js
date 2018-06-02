@@ -22,7 +22,10 @@ class NewPost extends Component {
   state = {
     name: '',
     content: '',
-    image: ''
+    imageFile: '',
+    imagePrev: '',
+    imageURL: '',
+    loading: false
   }
 
   handleChange = event => {
@@ -30,8 +33,15 @@ class NewPost extends Component {
   }
 
   handleDrop = files => {
+    this.setState({ imagePrev: files[0].preview, imageFile: files[0] })
+  }
+
+  handleSubmit = (e, writePost) => {
+    e.preventDefault()
+    this.setState({ loading: true })
+
     const formData = new FormData()
-    formData.append('file', files[0])
+    formData.append('file', this.state.imageFile)
     formData.append('upload_preset', process.env.CLOUDINARY_PRESET) // Replace the preset name with your own
     formData.append('api_key', process.env.CLOUDINARY_KEY) // Replace API key with your own Cloudinary key
     formData.append('timestamp', (Date.now() / 1000) | 0)
@@ -48,32 +58,47 @@ class NewPost extends Component {
       )
       .then(response => {
         const data = response.data
-        this.setState({ image: data.secure_url }) // You should store this URL for future references in your app
-        console.log(data)
+        this.setState({ imageURL: data.secure_url }, async () => {
+          console.log(data)
+
+          try {
+            const { data } = await writePost(writePostOptions())
+
+            Router.push('/')
+          } catch (error) {
+            console.log(error)
+            this.setState({
+              name: '',
+              content: '',
+              imageFile: '',
+              imagePrev: '',
+              imageURL: '',
+              loading: false
+            })
+          }
+        })
       })
-  }
-
-  handleSubmit = async (e, writePost) => {
-    e.preventDefault()
-
-    try {
-      const { data } = await writePost(writePostOptions())
-
-      Router.push('/')
-    } catch (error) {
-      console.log(error)
-      this.setState({
-        name: '',
-        content: '',
-        image: ''
+      .catch(error => {
+        console.log(error)
+        this.setState({
+          name: '',
+          content: '',
+          imageFile: '',
+          imagePrev: '',
+          imageURL: '',
+          loading: false
+        })
       })
-    }
   }
 
   render() {
-    const { name, content, image } = this.state
+    const { name, content, imageURL, imagePrev } = this.state
+
     return (
-      <Mutation mutation={WRITE_POST} variables={{ name, content, image }}>
+      <Mutation
+        mutation={WRITE_POST}
+        variables={{ name, content, image: imageURL }}
+      >
         {(writePost, { loading, error, data }) => (
           <Container>
             <Form
@@ -100,7 +125,7 @@ class NewPost extends Component {
                 >
                   Upload cover image
                 </Dropzone>
-                {image && <StyledImage src={image} />}
+                {imagePrev && <StyledImage src={imagePrev} />}
               </Form.Field>
               <Form.Field>
                 <label>Content</label>
@@ -116,7 +141,7 @@ class NewPost extends Component {
               {error && (
                 <Message error header="Ooops!" content={error.message} />
               )}
-              {loading ? (
+              {this.state.loading || loading ? (
                 <Loader active inline />
               ) : (
                 <Button type="submit">Submit</Button>
