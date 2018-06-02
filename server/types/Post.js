@@ -6,6 +6,7 @@ type Post {
   updatedAt: String!
   name: String!
   content: String!
+  image: String
   postedBy: User!
   comments(offset: Int, limit: Int): [Comment!]
   likes: [Like!]
@@ -28,7 +29,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  writePost(name: String!, content: String!): Post!
+  writePost(name: String!, content: String!, image: String): Post!
   deletePost(_id: String): Post!
 }
 

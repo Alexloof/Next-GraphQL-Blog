@@ -1,6 +1,6 @@
 import { getUserId } from '../../../utils'
 
-export default async (parent, { name, content }, ctx) => {
+export default async (parent, { name, content, image }, ctx) => {
   try {
     if (!ctx.user) throw new Error('Not authenticated')
 
@@ -9,6 +9,7 @@ export default async (parent, { name, content }, ctx) => {
     const post = await postModel.create({
       name,
       content,
+      image,
       postedBy: ctx.user
     })
 

@@ -7,6 +7,7 @@ export const NEW_POST_SUB = gql`
       createdAt
       name
       content
+      image
       postedBy {
         _id
         name

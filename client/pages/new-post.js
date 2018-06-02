@@ -28,23 +28,25 @@ class NewPost extends Component {
   }
 
   handleDrop = files => {
-    // Push all the axios request promise into a single array
-    console.log(files[0])
-    // Initial FormData
     const formData = new FormData()
     formData.append('file', files[0])
-    formData.append('upload_preset', 'fulksj5x') // Replace the preset name with your own
-    formData.append('api_key', '399346686547332') // Replace API key with your own Cloudinary key
+    formData.append('upload_preset', process.env.CLOUDINARY_PRESET) // Replace the preset name with your own
+    formData.append('api_key', process.env.CLOUDINARY_KEY) // Replace API key with your own Cloudinary key
     formData.append('timestamp', (Date.now() / 1000) | 0)
 
-    // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
     axios
-      .post('https://api.cloudinary.com/v1_1/alexloof/image/upload', formData, {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-      })
+      .post(
+        `https://api.cloudinary.com/v1_1/${
+          process.env.CLOUDINARY_NAME
+        }/image/upload`,
+        formData,
+        {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }
+      )
       .then(response => {
         const data = response.data
-        const fileURL = data.secure_url // You should store this URL for future references in your app
+        this.setState({ image: data.secure_url }) // You should store this URL for future references in your app
         console.log(data)
       })
   }
@@ -53,22 +55,9 @@ class NewPost extends Component {
     e.preventDefault()
 
     try {
-      const formData = new FormData()
-      formData.append('file', this.state.file)
-      formData.append('upload_preset', 'fulksj5x') // Replace the preset name with your own
-      formData.append('api_key', '399346686547332') // Replace API key with your own Cloudinary key
-      formData.append('timestamp', (Date.now() / 1000) | 0)
+      const { data } = await writePost(writePostOptions())
 
-      axios
-        .post('https://api.cloudinary.com/v1_1/alexloof/upload', formData, {
-          headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(result => console.log(result))
-        .catch(e => console.log(e))
-
-      // const { data } = await writePost(writePostOptions())
-
-      // Router.push('/')
+      Router.push('/')
     } catch (error) {
       console.log(error)
       this.setState({
@@ -80,9 +69,9 @@ class NewPost extends Component {
   }
 
   render() {
-    const { name, content } = this.state
+    const { name, content, image } = this.state
     return (
-      <Mutation mutation={WRITE_POST} variables={{ name, content }}>
+      <Mutation mutation={WRITE_POST} variables={{ name, content, image }}>
         {(writePost, { loading, error, data }) => (
           <Container>
             <Form
@@ -102,9 +91,14 @@ class NewPost extends Component {
               </Form.Field>
               <Form.Field>
                 <label>Image</label>
-                <Dropzone onDrop={this.handleDrop} accept="image/*">
-                  <p>Drop your files or click here to upload</p>
+                <Dropzone
+                  style={dropzoneStyles}
+                  onDrop={this.handleDrop}
+                  accept="image/*"
+                >
+                  Upload cover image
                 </Dropzone>
+                {image && <StyledImage src={image} />}
               </Form.Field>
               <Form.Field>
                 <label>Content</label>
@@ -136,5 +130,26 @@ class NewPost extends Component {
 const Container = styled.div`
   padding: 50px 150px;
 `
+
+const StyledImage = styled.img`
+  width: 300px;
+  height: 250px;
+  margin: 30px 0px 10px 0px;
+  object-fit: cover;
+`
+
+const dropzoneStyles = {
+  height: '55px',
+  background: '#ffb710',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  color: '#4a4a4a',
+  fontWeight: 'bold',
+  fontSize: '15px',
+  width: '180px',
+  borderRadius: '3px',
+  cursor: 'pointer'
+}
 
 export default NewPost

@@ -5,12 +5,13 @@ import ALL_POSTS from '../../queries/post/allPosts'
 import { POSTS_LIMIT } from '../../constants'
 
 export const WRITE_POST = gql`
-  mutation writePost($name: String!, $content: String!) {
-    writePost(name: $name, content: $content) {
+  mutation writePost($name: String!, $content: String!, $image: String) {
+    writePost(name: $name, content: $content, image: $image) {
       _id
       name
       createdAt
       content
+      image
       postedBy {
         _id
         name

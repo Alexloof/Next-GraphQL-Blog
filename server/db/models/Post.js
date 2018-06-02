@@ -20,6 +20,9 @@ const postSchema = new mongoose.Schema({
     maxlength: 2000,
     required: true
   },
+  image: {
+    type: String
+  },
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',

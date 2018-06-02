@@ -35,6 +35,7 @@ class PostCard extends Component {
       likes,
       comments,
       createdAt,
+      image,
       user
     } = this.props
 
@@ -51,7 +52,9 @@ class PostCard extends Component {
                       onClick={() => deletePost(deletePostOptions(this.props))}
                     />
                   )}
-                <Image src="/static/blog-placeholder.jpg" />
+                <StyledImage
+                  src={image ? image : '/static/blog-placeholder.jpg'}
+                />
                 <Card.Content>
                   <Card.Header>{name}</Card.Header>
                   <Card.Meta>By {postedBy.name}</Card.Meta>
@@ -99,13 +102,20 @@ const RemoveIcon = styled(Icon)`
     font-size: 18px;
     position: absolute;
     top: 5px;
-    z-index: 10;
+    z-index: 9;
     right: 0;
     cursor: pointer;
     transition: 0.2s all ease;
     &:hover {
       font-size: 22px;
     }
+  }
+`
+
+const StyledImage = styled(Image)`
+  &&& {
+    height: 191px;
+    object-fit: cover;
   }
 `
 
