@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 import styled from 'styled-components'
 import { Transition, animated } from 'react-spring'
-import { Input, Form } from 'semantic-ui-react'
+import { Input, Form, Icon } from 'semantic-ui-react'
 
 import FeedList from '../components/FeedList'
 import LoadPendingButton from '../components/LoadPendingButton'
@@ -38,6 +38,8 @@ class Home extends Component {
   subscribeToNewPosts = subscribeToMore =>
     subscribeToMore({
       document: NEW_POST_SUB,
+
+      // updateQuery here because we want to reach component state
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev
 
@@ -85,7 +87,6 @@ class Home extends Component {
     // Read and write to cache to minimize network requests.
     // Though some likes & comments can be missed.
     // Use a refetch instead of read/write to cache to solve that.
-
     const { allPosts } = this.props.client.readQuery({
       query: ALL_POSTS,
       variables: { offset: 0, limit: POSTS_LIMIT, sort: '-createdAt' }
@@ -170,13 +171,22 @@ class Home extends Component {
               </Transition>
 
               <Form onSubmit={this.searchPosts}>
-                <StyledInput
-                  onChange={e => this.setState({ searchTerm: e.target.value })}
-                  value={this.state.searchTerm}
-                  size="large"
-                  icon="search"
-                  placeholder="Search..."
-                />
+                <StyledInput size="large" icon placeholder="Search...">
+                  <input
+                    onChange={e =>
+                      this.setState({ searchTerm: e.target.value })
+                    }
+                    value={this.state.searchTerm}
+                  />
+                  {!!this.state.searchTerm.length ? (
+                    <StyledIcon
+                      name="remove"
+                      onClick={() => this.setState({ searchTerm: '' })}
+                    />
+                  ) : (
+                    <StyledIcon name="search" onClick={this.searchPosts} />
+                  )}
+                </StyledInput>
               </Form>
 
               <FeedList
@@ -214,5 +224,12 @@ const StyledInput = styled(Input)`
     height: 50px;
     margin: 0 auto;
     margin-top: 30px;
+  }
+`
+
+const StyledIcon = styled(Icon)`
+  &&& {
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
 `

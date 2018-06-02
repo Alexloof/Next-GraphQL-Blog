@@ -14,6 +14,8 @@ import {
   Message
 } from 'semantic-ui-react'
 
+import privatePage from '../lib/privatePage'
+
 import { WRITE_POST, writePostOptions } from '../api/mutations/post/writePost'
 
 class NewPost extends Component {
@@ -152,4 +154,4 @@ const dropzoneStyles = {
   cursor: 'pointer'
 }
 
-export default NewPost
+export default privatePage(NewPost)
