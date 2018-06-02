@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Router from 'next/router'
 import { Mutation } from 'react-apollo'
+import axios from 'axios'
+import Dropzone from 'react-dropzone'
 import {
   Button,
   Form,
@@ -25,14 +27,50 @@ class NewPost extends Component {
     this.setState({ [event.target.name]: event.target.value })
   }
 
+  handleDrop = files => {
+    // Push all the axios request promise into a single array
+    console.log(files[0])
+    // Initial FormData
+    const formData = new FormData()
+    formData.append('file', files[0])
+    formData.append('upload_preset', 'fulksj5x') // Replace the preset name with your own
+    formData.append('api_key', '399346686547332') // Replace API key with your own Cloudinary key
+    formData.append('timestamp', (Date.now() / 1000) | 0)
+
+    // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
+    axios
+      .post('https://api.cloudinary.com/v1_1/alexloof/image/upload', formData, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(response => {
+        const data = response.data
+        const fileURL = data.secure_url // You should store this URL for future references in your app
+        console.log(data)
+      })
+  }
+
   handleSubmit = async (e, writePost) => {
     e.preventDefault()
 
     try {
-      const { data } = await writePost(writePostOptions())
+      const formData = new FormData()
+      formData.append('file', this.state.file)
+      formData.append('upload_preset', 'fulksj5x') // Replace the preset name with your own
+      formData.append('api_key', '399346686547332') // Replace API key with your own Cloudinary key
+      formData.append('timestamp', (Date.now() / 1000) | 0)
 
-      Router.push('/')
+      axios
+        .post('https://api.cloudinary.com/v1_1/alexloof/upload', formData, {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(result => console.log(result))
+        .catch(e => console.log(e))
+
+      // const { data } = await writePost(writePostOptions())
+
+      // Router.push('/')
     } catch (error) {
+      console.log(error)
       this.setState({
         name: '',
         content: '',
@@ -64,13 +102,9 @@ class NewPost extends Component {
               </Form.Field>
               <Form.Field>
                 <label>Image</label>
-                <Input
-                  name="image"
-                  type="file"
-                  onChange={this.handleChange}
-                  autoComplete="image"
-                  //value={this.state.name}
-                />
+                <Dropzone onDrop={this.handleDrop} accept="image/*">
+                  <p>Drop your files or click here to upload</p>
+                </Dropzone>
               </Form.Field>
               <Form.Field>
                 <label>Content</label>
