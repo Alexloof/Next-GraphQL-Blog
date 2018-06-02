@@ -5,7 +5,6 @@ import { ApolloProvider } from 'react-apollo'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import { Container as StyledContainer } from 'semantic-ui-react'
-import styled from 'styled-components'
 
 import isAuth from '../lib/isAuth'
 
@@ -38,6 +37,7 @@ class NextApp extends App {
       ...pageProps,
       client: apolloClient
     }
+
     return (
       <NextContainer>
         <ContextProvider>

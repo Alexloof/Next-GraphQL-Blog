@@ -13,16 +13,19 @@ class FeedList extends Component {
   }
 
   render() {
+    const { posts, fetchMore, hasMorePosts } = this.props
     return (
       <Container>
         <InfiniteScroll
-          dataLength={this.props.posts.length}
-          next={this.props.fetchMore}
-          hasMore={this.props.hasMorePosts}
+          dataLength={posts.length}
+          next={fetchMore}
+          hasMore={hasMorePosts}
+          style={{ overflow: 'hidden' }}
         >
           <FlipMove
             duration={500}
             easing="ease-in-out"
+            appearAnimation="fade"
             enterAnimation="accordionHorizontal"
             leaveAnimation="accordionHorizontal"
             typeName="ul"
@@ -31,11 +34,15 @@ class FeedList extends Component {
               padding: 0
             }}
           >
-            {this.props.posts.map((post, index) => (
-              <li key={post._id} style={{ display: 'inline-block' }}>
-                <PostCard key={post._id} index={index} {...post} />
-              </li>
-            ))}
+            {!!posts.length ? (
+              posts.map((post, index) => (
+                <li key={post._id} style={{ display: 'inline-block' }}>
+                  <PostCard key={post._id} index={index} {...post} />
+                </li>
+              ))
+            ) : (
+              <div>No Posts here... :(</div>
+            )}
           </FlipMove>
         </InfiniteScroll>
       </Container>
@@ -46,7 +53,7 @@ class FeedList extends Component {
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding: 40px;
+  padding: 10px 40px;
   .ui.card {
     margin: 15px;
     width: 310px;

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 import styled from 'styled-components'
 import { Transition, animated } from 'react-spring'
+import { Input, Form } from 'semantic-ui-react'
 
 import FeedList from '../components/FeedList'
 import LoadPendingButton from '../components/LoadPendingButton'
@@ -18,7 +19,8 @@ import { POSTS_LIMIT } from '../api/constants'
 
 class Home extends Component {
   state = {
-    newPosts: []
+    newPosts: [],
+    searchTerm: ''
   }
 
   subscribeToNewLikes = subscribeToMore =>
@@ -109,6 +111,36 @@ class Home extends Component {
     })
   }
 
+  searchPosts = async e => {
+    e.preventDefault()
+    const { data } = await this.props.client.query({
+      query: ALL_POSTS,
+      variables: {
+        filter: this.state.searchTerm,
+        sort: '-createdAt',
+        limit: POSTS_LIMIT,
+        offset: 0
+      }
+    })
+
+    const cacheData = this.props.client.readQuery({
+      query: ALL_POSTS,
+      variables: { offset: 0, limit: POSTS_LIMIT, sort: '-createdAt' }
+    })
+
+    this.props.client.writeQuery({
+      query: ALL_POSTS,
+      variables: { offset: 0, limit: POSTS_LIMIT, sort: '-createdAt' },
+      data: {
+        allPosts: {
+          __typename: 'PostFeed',
+          count: cacheData.allPosts.count,
+          posts: [...data.allPosts.posts]
+        }
+      }
+    })
+  }
+
   render() {
     return (
       <Query
@@ -137,6 +169,16 @@ class Home extends Component {
                   ))}
               </Transition>
 
+              <Form onSubmit={this.searchPosts}>
+                <StyledInput
+                  onChange={e => this.setState({ searchTerm: e.target.value })}
+                  value={this.state.searchTerm}
+                  size="large"
+                  icon="search"
+                  placeholder="Search..."
+                />
+              </Form>
+
               <FeedList
                 posts={allPosts.posts}
                 subscribeToNewLikes={() =>
@@ -163,3 +205,14 @@ class Home extends Component {
 }
 
 export default Home
+
+const StyledInput = styled(Input)`
+  &&& {
+    display: flex;
+    justify-content: center;
+    width: 400px;
+    height: 50px;
+    margin: 0 auto;
+    margin-top: 30px;
+  }
+`
