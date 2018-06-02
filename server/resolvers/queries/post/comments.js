@@ -1,4 +1,4 @@
-export default async ({ _id }, args, { db, loaders }) => {
+export default async ({ _id }, { offset, limit }, { db, loaders }) => {
   try {
     const commentModel = db.model('comment')
 
@@ -7,7 +7,8 @@ export default async ({ _id }, args, { db, loaders }) => {
       model: commentModel,
       field: 'post',
       options: {
-        limit: 3
+        offset,
+        limit
       }
     })
   } catch (error) {

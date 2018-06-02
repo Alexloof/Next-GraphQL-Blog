@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Comment, Input } from 'semantic-ui-react'
 import styled from 'styled-components'
 import moment from 'moment'
-import { Mutation } from 'react-apollo'
+import { Mutation, Query } from 'react-apollo'
 import ReactDOM from 'react-dom'
 
 import withUser from '../lib/withUser'
@@ -50,53 +50,56 @@ class CommentList extends Component {
   }
 
   render() {
-    const { comments, postId, user } = this.props
+    const { postId, user } = this.props
     return (
       <Mutation
         mutation={COMMENT_POST}
         variables={{ postId: postId, text: this.state.input }}
       >
         {(commentPost, { loading, error, data }) => (
-          <CommentContainer>
-            <StyledList
-              ref={node => {
-                this.messageList = node
-              }}
-            >
-              {comments.map(comment => {
-                return (
-                  <Comment key={comment._id}>
-                    <Comment.Content>
-                      <Comment.Author as="a">
-                        {comment.commentedBy.name}
-                      </Comment.Author>
-                      <Comment.Metadata>
-                        <div>
-                          {moment(new Date(comment.createdAt)).fromNow()}
-                        </div>
-                      </Comment.Metadata>
-                      <Comment.Text>{comment.text}</Comment.Text>
-                    </Comment.Content>
-                  </Comment>
-                )
-              })}
-              <div
-                style={{ float: 'left', clear: 'both' }}
-                ref={el => {
-                  this.messagesEnd = el
+          <Query query={COMMENTS_BY_POST} variabels={{ postId: postId }}>
+            {{ loading, fetchMore, data }}
+            <CommentContainer>
+              <StyledList
+                ref={node => {
+                  this.messageList = node
                 }}
-              />
-            </StyledList>
+              >
+                {comments.map(comment => {
+                  return (
+                    <Comment key={comment._id}>
+                      <Comment.Content>
+                        <Comment.Author as="a">
+                          {comment.commentedBy.name}
+                        </Comment.Author>
+                        <Comment.Metadata>
+                          <div>
+                            {moment(new Date(comment.createdAt)).fromNow()}
+                          </div>
+                        </Comment.Metadata>
+                        <Comment.Text>{comment.text}</Comment.Text>
+                      </Comment.Content>
+                    </Comment>
+                  )
+                })}
+                <div
+                  style={{ float: 'left', clear: 'both' }}
+                  ref={el => {
+                    this.messagesEnd = el
+                  }}
+                />
+              </StyledList>
 
-            <form onSubmit={e => this.writeComment(e, commentPost)}>
-              <Input
-                action="Comment"
-                value={this.state.input}
-                onChange={this.handleChange}
-                placeholder="Write a comment..."
-              />
-            </form>
-          </CommentContainer>
+              <form onSubmit={e => this.writeComment(e, commentPost)}>
+                <Input
+                  action="Comment"
+                  value={this.state.input}
+                  onChange={this.handleChange}
+                  placeholder="Write a comment..."
+                />
+              </form>
+            </CommentContainer>
+          </Query>
         )}
       </Mutation>
     )

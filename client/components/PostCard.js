@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
-import { Card, Icon, Image } from 'semantic-ui-react'
+import { Card, Icon, Image, Divider } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
 import ALL_POSTS from '../api/queries/post/allPosts'
 import { LIKE_POST, likePostOptions } from '../api/mutations/like/likePost'
+import {
+  DELETE_POST,
+  deletePostOptions
+} from '../api/mutations/post/deletePost'
 
 import withUser from '../lib/withUser'
 import CommentList from './CommentList'
@@ -36,27 +40,40 @@ class PostCard extends Component {
 
     return (
       <Mutation mutation={LIKE_POST} variables={{ postId: _id }}>
-        {(likePost, { loading, error, data }) => (
-          <StyledCard props={{ showComments }}>
-            <Image src="/static/blog-placeholder.jpg" />
-            <Card.Content>
-              <Card.Header>{name}</Card.Header>
-              <Card.Meta>By {postedBy.name}</Card.Meta>
-              <Card.Description>{content}</Card.Description>
-            </Card.Content>
-            <BottomSection extra>
-              <a onClick={this.toggleComments}>
-                <Icon name="comment" />
-                {comments.length} Comments
-              </a>
-              <a onClick={() => likePost(likePostOptions(this.props))}>
-                <Icon name="like" />
-                {likes.length} Likes
-              </a>
-            </BottomSection>
+        {likePost => (
+          <Mutation mutation={DELETE_POST} variables={{ _id: _id }}>
+            {deletePost => (
+              <StyledCard props={{ showComments }}>
+                {user &&
+                  user._id === postedBy._id && (
+                    <RemoveIcon
+                      name="remove"
+                      onClick={() => deletePost(deletePostOptions(this.props))}
+                    />
+                  )}
+                <Image src="/static/blog-placeholder.jpg" />
+                <Card.Content>
+                  <Card.Header>{name}</Card.Header>
+                  <Card.Meta>By {postedBy.name}</Card.Meta>
+                  <Card.Description>{content}</Card.Description>
+                </Card.Content>
+                <BottomSection extra>
+                  <a onClick={this.toggleComments}>
+                    <Icon name="comment" />
+                    {comments.length} Comments
+                  </a>
+                  <a onClick={() => likePost(likePostOptions(this.props))}>
+                    <Icon name="like" />
+                    {likes.length} Likes
+                  </a>
+                </BottomSection>
 
-            {showComments && <CommentList comments={comments} postId={_id} />}
-          </StyledCard>
+                {showComments && (
+                  <CommentList comments={comments} postId={_id} />
+                )}
+              </StyledCard>
+            )}
+          </Mutation>
         )}
       </Mutation>
     )
@@ -75,6 +92,21 @@ const StyledCard = styled(Card)`
 const BottomSection = styled(Card.Content)`
   display: flex;
   justify-content: space-between;
+`
+
+const RemoveIcon = styled(Icon)`
+  &&& {
+    font-size: 18px;
+    position: absolute;
+    top: 5px;
+    z-index: 10;
+    right: 0;
+    cursor: pointer;
+    transition: 0.2s all ease;
+    &:hover {
+      font-size: 22px;
+    }
+  }
 `
 
 export default withUser(PostCard)

@@ -7,7 +7,7 @@ type Post {
   name: String!
   content: String!
   postedBy: User!
-  comments: [Comment!]
+  comments(offset: Int, limit: Int): [Comment!]
   likes: [Like!]
 }
 
@@ -23,11 +23,13 @@ extend type Query {
     limit: Int
     sort: String
   ): PostFeed!
+
   postById(_id: String): Post!
 }
 
 extend type Mutation {
   writePost(name: String!, content: String!): Post!
+  deletePost(_id: String): Post!
 }
 
 extend type Subscription {
