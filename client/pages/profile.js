@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import styled from 'styled-components'
 
-import { Form, Header, Input, Button } from 'semantic-ui-react'
+import { Form, Header, Input, Button, Loader, Message } from 'semantic-ui-react'
 
 import privatePage from '../lib/privatePage'
+import withUser from '../lib/withUser'
 
 import { UPDATE_USER } from '../api/mutations/user/updateUser'
 import { GET_CURRENT_USER } from '../api/queries/user/getCurrentUser'
@@ -17,8 +18,39 @@ class Profile extends Component {
     newPassword: ''
   }
 
-  handleSubmit = (e, updateUser) => {
+  handleSubmit = async (e, updateUser) => {
     e.preventDefault()
+    try {
+      const { data } = await updateUser()
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          _id: data.updateUser._id,
+          email: data.updateUser.email,
+          name: data.updateUser.name
+        })
+      )
+
+      this.props.setUser({
+        _id: data.updateUser._id,
+        email: data.updateUser.email,
+        name: data.updateUser.name
+      })
+
+      this.setState({
+        name: data.updateUser.name,
+        email: data.updateUser.email,
+        password: '',
+        newPassword: ''
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({
+        password: '',
+        newPassword: ''
+      })
+    }
   }
 
   handleChange = event => {
@@ -35,11 +67,11 @@ class Profile extends Component {
             mutation={UPDATE_USER}
             variables={{ name, email, password, newPassword }}
           >
-            {(writePost, { loading, error }) => (
+            {(updateUser, { loading, error }) => (
               <Container>
                 <Form
                   error={!!error}
-                  onSubmit={e => this.handleSubmit(e, UPDATE_USER)}
+                  onSubmit={e => this.handleSubmit(e, updateUser)}
                 >
                   <Header size="large">Profile</Header>
                   <Form.Field>
@@ -108,4 +140,4 @@ const Container = styled.div`
   padding: 50px 150px;
 `
 
-export default privatePage(Profile)
+export default privatePage(withUser(Profile))

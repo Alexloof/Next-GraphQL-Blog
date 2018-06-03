@@ -15,7 +15,7 @@ extend type Query {
 }
 
 extend type Mutation {
-  updateUser(name: String, email: String, password: String): User!
+  updateUser(name: String, email: String, password: String, newPassword: String): User!
 }
 
 `

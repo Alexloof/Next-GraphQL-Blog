@@ -30,7 +30,7 @@ class Login extends Component {
     try {
       const { data } = await signup()
 
-      localStorage.setItem('userId', data.signup.user._id)
+      //localStorage.setItem('userId', data.signup.user._id)
 
       localStorage.setItem(
         'user',

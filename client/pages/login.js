@@ -45,7 +45,6 @@ class Login extends Component {
       Router.push('/')
     } catch (error) {
       this.setState({
-        email: '',
         password: ''
       })
     }
