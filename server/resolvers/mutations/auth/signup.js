@@ -11,8 +11,6 @@ export default async (_, { email, password, name }, ctx) => {
       throw new Error('Email is already taken')
     }
 
-    const createdAt = new Date()
-
     const hashedPassword = await bcrypt.hash(password, 10)
     user = await userModel.create({
       email,
