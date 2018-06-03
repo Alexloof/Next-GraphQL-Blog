@@ -2,27 +2,24 @@ import React from 'react'
 
 import { Context } from '../context'
 
-export default function withUser(WrappedComponent) {
-  return class extends React.Component {
+export default Page =>
+  class BaseComponent extends React.Component {
     static async getInitialProps(ctx) {
       const props = {}
 
-      if (WrappedComponent.getInitialProps) {
-        Object.assign(
-          props,
-          (await WrappedComponent.getInitialProps(ctx)) || {}
-        )
+      if (Page.getInitialProps) {
+        Object.assign(props, (await Page.getInitialProps(ctx)) || {})
       }
-
       return props
     }
+
     render() {
       if (process.browser) {
         return (
           <Context.Consumer>
             {context => {
               return (
-                <WrappedComponent
+                <Page
                   {...this.props}
                   user={context ? context.state.user : ''}
                   setUser={context ? context.actions.setUser : ''}
@@ -33,8 +30,7 @@ export default function withUser(WrappedComponent) {
           </Context.Consumer>
         )
       } else {
-        return <WrappedComponent {...this.props} />
+        return <Page {...this.props} />
       }
     }
   }
-}

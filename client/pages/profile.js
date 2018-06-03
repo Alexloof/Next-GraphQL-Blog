@@ -140,4 +140,4 @@ const Container = styled.div`
   padding: 50px 150px;
 `
 
-export default privatePage(withUser(Profile))
+export default withUser(Profile)
