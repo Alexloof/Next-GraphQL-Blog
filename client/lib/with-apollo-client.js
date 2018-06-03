@@ -35,11 +35,9 @@ export default App => {
         appProps = await App.getInitialProps(ctx)
       }
 
-      // if (res && res.finished) {
-      //   // When redirecting, the response is finished.
-      //   // No point in continuing to render
-      //   return {}
-      // }
+      if (res && res.finished) {
+        return {}
+      }
 
       try {
         // Run all GraphQL queries

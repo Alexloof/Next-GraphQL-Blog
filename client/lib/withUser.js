@@ -14,23 +14,19 @@ export default Page =>
     }
 
     render() {
-      if (process.browser) {
-        return (
-          <Context.Consumer>
-            {context => {
-              return (
-                <Page
-                  {...this.props}
-                  user={context ? context.state.user : ''}
-                  setUser={context ? context.actions.setUser : ''}
-                  clearUser={context ? context.actions.clearUser : ''}
-                />
-              )
-            }}
-          </Context.Consumer>
-        )
-      } else {
-        return <Page {...this.props} />
-      }
+      return (
+        <Context.Consumer>
+          {context => {
+            return (
+              <Page
+                {...this.props}
+                user={context ? context.state.user : ''}
+                setUser={context ? context.actions.setUser : ''}
+                clearUser={context ? context.actions.clearUser : ''}
+              />
+            )
+          }}
+        </Context.Consumer>
+      )
     }
   }

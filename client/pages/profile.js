@@ -61,13 +61,13 @@ class Profile extends Component {
     const { name, email, password, newPassword } = this.state
 
     return (
-      <Query query={GET_CURRENT_USER}>
-        {({ data: { currentUser } }) => (
-          <Mutation
-            mutation={UPDATE_USER}
-            variables={{ name, email, password, newPassword }}
-          >
-            {(updateUser, { loading, error }) => (
+      <Mutation
+        mutation={UPDATE_USER}
+        variables={{ name, email, password, newPassword }}
+      >
+        {(updateUser, { loading, error }) => (
+          <Query query={GET_CURRENT_USER}>
+            {({ data: { currentUser } }) => (
               <Container>
                 <Form
                   error={!!error}
@@ -81,7 +81,7 @@ class Profile extends Component {
                       onChange={this.handleChange}
                       placeholder="What is your name?"
                       autoComplete="name"
-                      value={name || currentUser.name}
+                      value={currentUser ? name || currentUser.name : name}
                     />
                   </Form.Field>
                   <Form.Field>
@@ -91,7 +91,7 @@ class Profile extends Component {
                       onChange={this.handleChange}
                       placeholder="What is your email?"
                       autoComplete="email"
-                      value={email || currentUser.email}
+                      value={currentUser ? email || currentUser.email : email}
                     />
                   </Form.Field>
                   <Header size="medium">Change password</Header>
@@ -129,9 +129,9 @@ class Profile extends Component {
                 </Form>
               </Container>
             )}
-          </Mutation>
+          </Query>
         )}
-      </Query>
+      </Mutation>
     )
   }
 }
@@ -140,4 +140,4 @@ const Container = styled.div`
   padding: 50px 150px;
 `
 
-export default withUser(Profile)
+export default privatePage(withUser(Profile))
