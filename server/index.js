@@ -67,7 +67,7 @@ const startServer = async () => {
   server.express.use(session(sess))
 
   const corsOptions = {
-    origin: dev ? 'http://localhost:3000' : 'http://localhost:3000',
+    origin: dev ? process.env.CLIENT_URL_DEV : process.env.CLIENT_URL_PROD,
     credentials: true
   }
 

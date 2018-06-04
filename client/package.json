@@ -1,5 +1,5 @@
 {
-  "name": "create-next-example-app",
+  "name": "next-graphql-client",
   "scripts": {
     "dev": "node index.js",
     "build": "next build",
@@ -14,7 +14,7 @@
     "apollo-link-ws": "^1.0.8",
     "apollo-utilities": "^1.0.13",
     "axios": "^0.18.0",
-    "babel-plugin-styled-components": "^1.5.1",
+    "babel-plugin-styled-components": "^1.5.0",
     "cookie": "^0.3.1",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
@@ -37,7 +37,7 @@
     "recompose": "^0.27.1",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.80.2",
-    "styled-components": "^3.3.0",
+    "styled-components": "^3.2.5",
     "subscriptions-transport-ws": "^0.9.9",
     "url-loader": "^1.0.1"
   },
