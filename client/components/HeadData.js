@@ -1,14 +1,16 @@
 import NextHead from 'next/head'
 import { string } from 'prop-types'
 
-const defaultDescription = ''
-const defaultOGURL = ''
+const defaultDescription =
+  'A Blog including a server and a client. Server is built with Node, Express & a customized GraphQL-yoga server. Client is built with React, Next js & Apollo client. '
+const defaultOGURL = 'https://next-graphql-client.now.sh/'
 const defaultOGImage = ''
+const defaultTitle = 'Next GraphQL Blog'
 
 const Head = props => (
   <NextHead>
     <meta charSet="UTF-8" />
-    <title>{props.title || ''}</title>
+    <title>{props.title || defaultTitle}</title>
     <meta
       name="description"
       content={props.description || defaultDescription}
