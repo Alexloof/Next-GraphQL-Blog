@@ -4,9 +4,6 @@ import Router from 'next/router'
 import { GET_CURRENT_USER } from '../api/queries/user/getCurrentUser'
 
 class AuthCallback extends Component {
-  static async getInitialProps(ctx) {
-    console.log(ctx)
-  }
   async componentDidMount() {
     const { data } = await this.props.client.query({
       query: GET_CURRENT_USER
@@ -18,7 +15,8 @@ class AuthCallback extends Component {
         JSON.stringify({
           _id: data.currentUser._id,
           name: data.currentUser.name,
-          email: data.currentUser.email
+          email: data.currentUser.email,
+          googleId: data.currentUser.googleId
         })
       )
     }

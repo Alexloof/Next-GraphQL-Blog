@@ -94,29 +94,40 @@ class Profile extends Component {
                       value={currentUser ? email || currentUser.email : email}
                     />
                   </Form.Field>
-                  <Header size="medium">Change password</Header>
-                  <Form.Field>
-                    <label>Current password</label>
-                    <Input
-                      type="password"
-                      name="password"
-                      onChange={this.handleChange}
-                      placeholder="Write your current password here..."
-                      autoComplete="password"
-                      value={password}
-                    />
-                  </Form.Field>
-                  <Form.Field>
-                    <label>New password</label>
-                    <Input
-                      type="password"
-                      name="newPassword"
-                      onChange={this.handleChange}
-                      placeholder="Write your new password here..."
-                      autoComplete="password"
-                      value={newPassword}
-                    />
-                  </Form.Field>
+                  {currentUser ? (
+                    currentUser.googleId ? (
+                      <Header size="small">
+                        You are logged in with a Google Account
+                      </Header>
+                    ) : (
+                      <>
+                        <Header size="medium">Change password</Header>
+
+                        <Form.Field>
+                          <label>Current password</label>
+                          <Input
+                            type="password"
+                            name="password"
+                            onChange={this.handleChange}
+                            placeholder="Write your current password here..."
+                            autoComplete="password"
+                            value={password}
+                          />
+                        </Form.Field>
+                        <Form.Field>
+                          <label>New password</label>
+                          <Input
+                            type="password"
+                            name="newPassword"
+                            onChange={this.handleChange}
+                            placeholder="Write your new password here..."
+                            autoComplete="password"
+                            value={newPassword}
+                          />
+                        </Form.Field>
+                      </>
+                    )
+                  ) : null}
 
                   {error && (
                     <Message error header="Ooops!" content={error.message} />

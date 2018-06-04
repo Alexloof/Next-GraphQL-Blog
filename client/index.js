@@ -9,12 +9,6 @@ const handle = app.getRequestHandler()
 app.prepare().then(() => {
   const server = express()
 
-  //EXMAPLE
-
-  // server.get('/posts/:id', (req, res) => {
-  //   return app.render(req, res, '/posts', { id: req.params.id })
-  // })
-
   server.get('/logout', (req, res) => {
     res.clearCookie('next-graphql.sid')
     return res.redirect('/')

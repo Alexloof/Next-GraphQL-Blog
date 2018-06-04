@@ -1,15 +1,16 @@
 import React, { Component } from 'react'
 import { graphql, compose, Query, Mutation } from 'react-apollo'
-import gql from 'graphql-tag'
 import Router from 'next/router'
 import styled from 'styled-components'
 import Link from 'next/link'
+import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
 
 import withUser from '../lib/withUser'
 
-import { Color } from '../styles/variables'
+import GoogleLoginButton from '../components/GoogleLoginButton'
+import StyledSignForm from '../components/StyledSignForm'
 
-import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
+import { SIGNUP_MUTATION } from '../api/mutations/user/signup'
 
 class Login extends Component {
   state = {
@@ -25,29 +26,10 @@ class Login extends Component {
   handleSubmit = async (e, signup) => {
     e.preventDefault()
 
-    const { email, password, name } = this.state
-
     try {
       const { data } = await signup()
 
-      //localStorage.setItem('userId', data.signup.user._id)
-
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          _id: data.signup.user._id,
-          email: data.signup.user.email,
-          name: data.signup.user.name
-        })
-      )
-
-      this.props.setUser({
-        _id: data.signup.user._id,
-        email: data.signup.user.email,
-        name: data.signup.user.name
-      })
-
-      Router.push('/')
+      Router.push('/authcallback')
     } catch (error) {
       this.setState({
         email: '',
@@ -65,9 +47,8 @@ class Login extends Component {
         variables={{ email, password, name }}
       >
         {(signup, { loading, error, data }) => (
-          <Container color={Color}>
-            <StyledForm
-              color={Color}
+          <Container>
+            <StyledSignForm
               error={!!error}
               onSubmit={e => this.handleSubmit(e, signup)}
             >
@@ -117,26 +98,14 @@ class Login extends Component {
               <Link href="/login">
                 <a>Have an account? Click here to login</a>
               </Link>
-            </StyledForm>
+              <GoogleLoginButton text="Signup with Google" />
+            </StyledSignForm>
           </Container>
         )}
       </Mutation>
     )
   }
 }
-
-const SIGNUP_MUTATION = gql`
-  mutation signup($email: String!, $password: String!, $name: String!) {
-    signup(email: $email, password: $password, name: $name) {
-      token
-      user {
-        _id
-        name
-        email
-      }
-    }
-  }
-`
 
 export default withUser(Login)
 
@@ -146,23 +115,7 @@ const Container = styled.div`
   align-items: center;
   height: calc(200px + 40vh);
 `
-const StyledForm = styled(Form)`
-  &&& {
-    background-color: #fdfdfd;
-    border-radius: 3px;
-    box-shadow: 0px 0px 0px 1px #75757533;
-    padding: 40px;
-    width: 550px;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    & .field label,
-    .header.large {
-      color: #7d7d7d;
-    }
-  }
-`
+
 const LoginButton = styled(Button)`
   &&& {
     width: 100%;
