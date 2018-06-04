@@ -6,6 +6,8 @@ import { Mutation, Query } from 'react-apollo'
 import ReactDOM from 'react-dom'
 
 import withUser from '../lib/withUser'
+import { showErrorAlert } from '../lib/alerts'
+import parseError from '../lib/parseError'
 
 import ALL_POSTS from '../api/queries/post/allPosts'
 import {
@@ -31,7 +33,9 @@ class CommentList extends Component {
     const { input } = this.state
     if (!input) return
 
-    commentPost(commentPostOptions(this.props, input))
+    commentPost(commentPostOptions(this.props, input)).catch(e =>
+      showErrorAlert(parseError(e))
+    )
 
     this.setState({
       input: ''

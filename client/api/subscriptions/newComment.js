@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import { showSuccessAlert } from '../../lib/alerts'
 
 export const NEW_COMMENT_SUB = gql`
   subscription newComment {
@@ -41,6 +42,16 @@ export const newCommentUpdate = (prev, { subscriptionData }) => {
           ? { ...post, comments: [...post.comments, newComment] }
           : post
     )
+
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if (user) {
+      if (newComment.commentedBy._id != user._id) {
+        showSuccessAlert(`New comment from ${newComment.commentedBy.name}`)
+      }
+    } else {
+      showSuccessAlert(`New comment from ${newComment.commentedBy.name}`)
+    }
 
     return {
       ...prev,

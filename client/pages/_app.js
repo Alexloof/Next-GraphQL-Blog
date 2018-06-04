@@ -5,6 +5,7 @@ import { ApolloProvider } from 'react-apollo'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import { Container as StyledContainer } from 'semantic-ui-react'
+import Alert from 'react-s-alert'
 
 import * as gtag from '../lib/gtag'
 
@@ -52,6 +53,7 @@ class NextApp extends App {
               <Head title="Next Graphql - Blogg" />
               <Nav {...propsWithClient} />
               <Component {...propsWithClient} />
+              <Alert stack={{ limit: 3 }} />
             </StyledContainer>
           </ApolloProvider>
         </ContextProvider>

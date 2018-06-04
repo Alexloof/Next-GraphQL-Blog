@@ -33,6 +33,7 @@
     "react-dropzone": "^4.2.11",
     "react-flip-move": "^3.0.2",
     "react-infinite-scroll-component": "^4.1.0",
+    "react-s-alert": "^1.4.1",
     "react-spring": "^5.3.8",
     "recompose": "^0.27.1",
     "semantic-ui-css": "^2.3.1",

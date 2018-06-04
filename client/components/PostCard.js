@@ -12,6 +12,9 @@ import {
 } from '../api/mutations/post/deletePost'
 
 import withUser from '../lib/withUser'
+import parseError from '../lib/parseError'
+import { showSuccessAlert, showErrorAlert } from '../lib/alerts'
+
 import CommentList from './CommentList'
 
 class PostCard extends Component {
@@ -49,7 +52,11 @@ class PostCard extends Component {
                   user._id === postedBy._id && (
                     <RemoveIcon
                       name="remove"
-                      onClick={() => deletePost(deletePostOptions(this.props))}
+                      onClick={() => {
+                        deletePost(deletePostOptions(this.props)).then(() =>
+                          showSuccessAlert('Post was deleted!')
+                        )
+                      }}
                     />
                   )}
 
@@ -72,7 +79,13 @@ class PostCard extends Component {
                     <Icon name="comment" />
                     {comments.length} Comments
                   </a>
-                  <a onClick={() => likePost(likePostOptions(this.props))}>
+                  <a
+                    onClick={() => {
+                      likePost(likePostOptions(this.props))
+                        .then(() => showSuccessAlert('You liked a Post!'))
+                        .catch(e => showErrorAlert(parseError(e)))
+                    }}
+                  >
                     <Icon name="like" />
                     {likes.length} Likes
                   </a>

@@ -3,8 +3,6 @@ import { ServerStyleSheet } from 'styled-components'
 
 export const GA_TRACKING_ID = process.env.GA_TRACKING_ID
 
-//import 'semantic-ui-css/semantic.min.css'
-
 export default class MyDocument extends Document {
   static getInitialProps({ renderPage }) {
     const sheet = new ServerStyleSheet()
@@ -25,8 +23,17 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"
           />
-          {/* <link rel="stylesheet" href="/_next/static/style.css" /> */}
           <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="/static/alertdefault.css"
+          />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="/static/alertjelly.css"
+          />
 
           {/* Global site tag (gtag.js) - Google Analytics  */}
           <script

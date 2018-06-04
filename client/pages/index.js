@@ -5,6 +5,7 @@ import { Transition, animated } from 'react-spring'
 import FeedList from '../components/FeedList'
 import SearchForm from '../components/SearchForm'
 import LoadPendingButton from '../components/LoadPendingButton'
+import FeedLoader from '../components/FeedLoader'
 
 import ALL_POSTS from '../api/queries/post/allPosts'
 import { NEW_LIKE_SUB, newLikeUpdate } from '../api/subscriptions/newLike'
@@ -163,8 +164,7 @@ class Home extends Component {
                 fetchMore={() => this.fetchMorePosts(fetchMore, postLength)}
               />
 
-              {/*fix nice loading spinner here */}
-              {loading && <p>Loading...</p>}
+              {loading && <FeedLoader />}
             </>
           )
         }}

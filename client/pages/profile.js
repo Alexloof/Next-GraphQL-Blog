@@ -6,6 +6,7 @@ import { Form, Header, Input, Button, Loader, Message } from 'semantic-ui-react'
 
 import privatePage from '../lib/privatePage'
 import withUser from '../lib/withUser'
+import { showSuccessAlert } from '../lib/alerts'
 
 import { UPDATE_USER } from '../api/mutations/user/updateUser'
 import { GET_CURRENT_USER } from '../api/queries/user/getCurrentUser'
@@ -28,14 +29,16 @@ class Profile extends Component {
         JSON.stringify({
           _id: data.updateUser._id,
           email: data.updateUser.email,
-          name: data.updateUser.name
+          name: data.updateUser.name,
+          googleId: data.updateUser.googleId
         })
       )
 
       this.props.setUser({
         _id: data.updateUser._id,
         email: data.updateUser.email,
-        name: data.updateUser.name
+        name: data.updateUser.name,
+        googleId: data.updateUser.googleId
       })
 
       this.setState({
@@ -44,6 +47,7 @@ class Profile extends Component {
         password: '',
         newPassword: ''
       })
+      showSuccessAlert('Your new profile settings were saved!')
     } catch (error) {
       console.log(error)
       this.setState({
