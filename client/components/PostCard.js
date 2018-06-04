@@ -52,14 +52,21 @@ class PostCard extends Component {
                       onClick={() => deletePost(deletePostOptions(this.props))}
                     />
                   )}
+
                 <StyledImage
                   src={image ? image : '/static/blog-placeholder.jpg'}
                 />
+
                 <Card.Content>
-                  <Card.Header>{name}</Card.Header>
-                  <Card.Meta>By {postedBy.name}</Card.Meta>
-                  <Card.Description>{content}</Card.Description>
+                  <Card.Header style={ellipsisStyle}>{name}</Card.Header>
+                  <Card.Meta style={ellipsisStyle}>
+                    By {postedBy.name}
+                  </Card.Meta>
+                  <Card.Description style={ellipsisStyle}>
+                    {content}
+                  </Card.Description>
                 </Card.Content>
+
                 <BottomSection extra>
                   <a onClick={this.toggleComments}>
                     <Icon name="comment" />
@@ -118,5 +125,11 @@ const StyledImage = styled(Image)`
     object-fit: cover;
   }
 `
+
+const ellipsisStyle = {
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden'
+}
 
 export default withUser(PostCard)
