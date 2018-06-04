@@ -6,6 +6,8 @@ import Router from 'next/router'
 import NProgress from 'nprogress'
 import { Container as StyledContainer } from 'semantic-ui-react'
 
+import * as gtag from '../lib/gtag'
+
 import isAuth from '../lib/isAuth'
 
 import Head from '../components/HeadData'
@@ -16,7 +18,10 @@ import ContextProvider from '../context'
 Router.onRouteChangeStart = () => {
   NProgress.start()
 }
-Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeComplete = url => {
+  gtag.pageview(url)
+  NProgress.done()
+}
 Router.onRouteChangeError = () => NProgress.done()
 
 class NextApp extends App {

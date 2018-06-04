@@ -1,6 +1,8 @@
 import Document, { Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
+export const GA_TRACKING_ID = process.env.GA_TRACKING_ID
+
 //import 'semantic-ui-css/semantic.min.css'
 
 export default class MyDocument extends Document {
@@ -25,6 +27,22 @@ export default class MyDocument extends Document {
           />
           {/* <link rel="stylesheet" href="/_next/static/style.css" /> */}
           <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
+
+          {/* Global site tag (gtag.js) - Google Analytics  */}
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}');
+          `
+            }}
+          />
         </Head>
         <body>
           <Main />
