@@ -1,5 +1,6 @@
 import single from './single'
 import multiple from './multiple'
+import queryLoader from './queryLoader'
 
 export default () => ({
   // make unique dataloaders - else Cache problem can occur
@@ -10,5 +11,7 @@ export default () => ({
   likes_ByPost: multiple(),
   likes_ByLikedBy: multiple(),
   post_ById: single(),
-  posts_ByPostedBy: multiple()
+  posts_ByPostedBy: multiple(),
+
+  queryLoader: queryLoader()
 })
