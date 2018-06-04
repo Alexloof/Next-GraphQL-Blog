@@ -8,6 +8,7 @@ import depthLimit from 'graphql-depth-limit'
 import helmet from 'helmet'
 import compression from 'compression'
 import initGoogleAuth from './auth/google'
+import passport from 'passport'
 import resolvers from './resolvers'
 import typeDefs from './types'
 import db from './db'
@@ -15,8 +16,6 @@ import { initUser } from './utils'
 import createLoaders from './loaders'
 
 const MongoStore = require('connect-mongo')(session)
-
-const port = parseInt(process.env.PORT, 10) || 4000
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -65,6 +64,10 @@ const startServer = async () => {
   }
 
   server.express.use(session(sess))
+
+  server.express.use(passport.initialize())
+  server.express.use(passport.session())
+
   initGoogleAuth(server.express)
 
   const corsOptions = {
@@ -73,6 +76,7 @@ const startServer = async () => {
   }
 
   //option object for graphql yoga
+  const port = parseInt(process.env.PORT, 10) || 4000
   const options = {
     port,
     cors: corsOptions

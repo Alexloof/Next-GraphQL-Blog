@@ -1,6 +1,8 @@
 var passport = require('passport')
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
 
+const dev = process.env.NODE_ENV !== 'production'
+
 import User from '../db/models/User'
 
 export default server => {
@@ -9,7 +11,9 @@ export default server => {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_SECRET_ID,
-        callbackURL: 'http://localhost:4000/auth/googlecallback'
+        callbackURL: dev
+          ? `${process.env.ROOT_URL_DEV}/auth/googlecallback`
+          : `${process.env.ROOT_URL_PROD}/auth/googlecallback`
       },
       async (accessToken, refreshToken, profile, done) => {
         const name =
@@ -63,20 +67,7 @@ export default server => {
     })
   })
 
-  server.use(passport.initialize())
-  server.use(passport.session())
-
   server.get('/auth/google', (req, res) => {
-    // if (
-    //   req.query &&
-    //   req.query.redirectUrl &&
-    //   req.query.redirectUrl.startsWith('/')
-    // ) {
-    //   req.session.finalUrl = req.query.redirectUrl
-    // } else {
-    //   req.session.finalUrl = null
-    // }
-
     passport.authenticate('google', {
       scope: ['profile', 'email'],
       prompt: 'select_account'
@@ -86,10 +77,16 @@ export default server => {
   server.get(
     '/auth/googlecallback',
     passport.authenticate('google', {
-      failureRedirect: 'http://localhost:3000/login'
+      failureRedirect: dev
+        ? `${process.env.CLIENT_URL_DEV}/login`
+        : `${process.env.CLIENT_URL_PROD}/login`
     }),
     (req, res) => {
-      res.redirect('http://localhost:3000/authcallback')
+      res.redirect(
+        dev
+          ? `${process.env.CLIENT_URL_DEV}/authcallback`
+          : `${process.env.CLIENT_URL_PROD}/authcallback`
+      )
     }
   )
 }
