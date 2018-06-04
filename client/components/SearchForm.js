@@ -70,6 +70,7 @@ const StyledInput = styled(Input)`
     height: 50px;
     margin: 0 auto;
     margin-top: 30px;
+    max-width: 100%;
   }
 `
 

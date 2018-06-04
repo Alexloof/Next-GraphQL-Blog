@@ -17,6 +17,13 @@ import { NEW_POST_SUB } from '../api/subscriptions/newPost'
 import { POSTS_LIMIT } from '../api/constants'
 
 class Home extends Component {
+  static async getInitialProps(ctx) {
+    const isFromServer = !!ctx.req
+
+    return {
+      isFromServer
+    }
+  }
   state = {
     newPosts: []
   }
@@ -142,6 +149,7 @@ class Home extends Component {
 
               <FeedList
                 posts={allPosts.posts}
+                isFromServer={this.props.isFromServer}
                 subscribeToNewLikes={() =>
                   this.subscribeToNewLikes(subscribeToMore)
                 }

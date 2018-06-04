@@ -65,10 +65,11 @@ const StyledMenu = styled(Menu)`
 const StyledLink = styled.a`
   color: #5f5f5f;
   line-height: 70px;
-  padding: 0 20px;
+  padding: 0 2vw;
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 1px;
+  white-space: nowrap;
 `
 
 export default Nav

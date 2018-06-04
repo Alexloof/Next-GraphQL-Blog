@@ -148,7 +148,7 @@ class Profile extends Component {
 }
 
 const Container = styled.div`
-  padding: 50px 150px;
+  padding: 5% 10%;
 `
 
 export default privatePage(withUser(Profile))

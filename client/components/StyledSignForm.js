@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Form } from 'semantic-ui-react'
 
 export default styled(Form)`
   &&& {

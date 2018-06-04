@@ -13,7 +13,7 @@ class FeedList extends Component {
   }
 
   render() {
-    const { posts, fetchMore, hasMorePosts } = this.props
+    const { posts, fetchMore, hasMorePosts, isFromServer } = this.props
     return (
       <Container>
         <InfiniteScroll
@@ -25,7 +25,7 @@ class FeedList extends Component {
           <FlipMove
             duration={500}
             easing="ease-in-out"
-            appearAnimation="fade"
+            appearAnimation={isFromServer ? 'none' : 'fade'}
             enterAnimation="accordionHorizontal"
             leaveAnimation="accordionHorizontal"
             typeName="ul"
@@ -56,7 +56,6 @@ class FeedList extends Component {
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
-  padding: 10px 40px;
   .ui.card {
     margin: 15px;
     width: 310px;
