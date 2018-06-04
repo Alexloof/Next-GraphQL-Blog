@@ -3,7 +3,8 @@ import jwt from 'jsonwebtoken'
 export const initUser = req => {
   // if social media signup/login (with passport js)
   if (req.request && req.request.user) {
-    return req.request.user._id
+    // PS. user._id comes as an object from passport js
+    return req.request.user._id.toString()
   }
 
   // if session cookie authorization

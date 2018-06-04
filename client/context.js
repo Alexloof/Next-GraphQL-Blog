@@ -7,29 +7,35 @@ class ContextProvider extends Component {
     user: {
       _id: '',
       email: '',
-      name: ''
+      name: '',
+      googleId: ''
     }
   }
+
   componentDidMount() {
     const user = JSON.parse(localStorage.getItem('user'))
     this.setState(prevState => ({
       user: { ...prevState.user, ...user }
     }))
   }
+
   setUser = user => {
     this.setState(prevState => ({
       user: { ...prevState.user, ...user }
     }))
   }
+
   clearUser = () => {
     this.setState({
       user: {
         _id: '',
         email: '',
-        name: ''
+        name: '',
+        googleId: ''
       }
     })
   }
+
   render() {
     return (
       <Context.Provider

@@ -5,7 +5,7 @@ export default async (parent, { name, content, image }, ctx) => {
     if (!ctx.user) throw new Error('Not authenticated')
 
     const postModel = ctx.db.model('post')
-
+    console.log('HÄR', ctx.user)
     const post = await postModel.create({
       name,
       content,

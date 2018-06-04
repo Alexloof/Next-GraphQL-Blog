@@ -8,15 +8,12 @@ export default async (parent, { _id }, ctx) => {
 
     const post = await postModel.findOne({ _id: _id }).exec()
 
-    if (post.postedBy != ctx.user) {
-      throw new Error('You can only delete your posts')
+    if (post.postedBy == ctx.user) {
+      await postModel.deleteOne({ _id: _id }).exec()
+
+      return post
     }
-
-    await postModel.deleteOne({ _id: _id }).exec()
-
-    // ctx.pubsub.publish('newLink', { newPost: post })
-
-    return post
+    throw new Error('You can only delete your posts')
   } catch (error) {
     throw new Error(error)
   }

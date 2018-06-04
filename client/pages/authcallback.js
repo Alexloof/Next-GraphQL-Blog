@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Router from 'next/router'
 
 import { GET_CURRENT_USER } from '../api/queries/user/getCurrentUser'
+import withUser from '../lib/withUser'
 
 class AuthCallback extends Component {
   async componentDidMount() {
@@ -19,6 +20,13 @@ class AuthCallback extends Component {
           googleId: data.currentUser.googleId
         })
       )
+
+      this.props.setUser({
+        _id: data.currentUser._id,
+        name: data.currentUser.name,
+        email: data.currentUser.email,
+        googleId: data.currentUser.googleId
+      })
     }
 
     Router.replace('/')
@@ -28,4 +36,4 @@ class AuthCallback extends Component {
   }
 }
 
-export default AuthCallback
+export default withUser(AuthCallback)
