@@ -1,13 +1,18 @@
 import jwt from 'jsonwebtoken'
 
 export const initUser = req => {
+  // if social media signup/login (with passport js)
+  if (req.request && req.request.user) {
+    return req.request.user._id
+  }
+
   // if session cookie authorization
-  console.log('SE HÄR', req.request)
   const cookieToken =
     req.request && req.request.session && req.request.session.token
       ? req.request.session.token
       : null
 
+  // if local signup/signin
   if (cookieToken) {
     return jwt.verify(cookieToken, process.env.AUTH_SECRET, (err, decoded) => {
       if (err) {

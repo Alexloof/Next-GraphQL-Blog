@@ -5,6 +5,8 @@ import Router from 'next/router'
 import styled from 'styled-components'
 import Link from 'next/link'
 
+const dev = process.env.NODE_ENV !== 'production'
+
 import withUser from '../lib/withUser'
 
 import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
@@ -94,6 +96,15 @@ class Login extends Component {
               )}
               <Link href="/signup">
                 <a>No account? Click here to create an account</a>
+              </Link>
+              <Link
+                href={
+                  dev
+                    ? `${process.env.API_URL_DEV}/auth/google`
+                    : `${process.env.API_URL_PROD}/auth/google`
+                }
+              >
+                <a>Google</a>
               </Link>
             </StyledForm>
           </Container>

@@ -34,7 +34,7 @@ function create(initialState, { getToken }) {
 
   const wsLink = process.browser
     ? new WebSocketLink({
-        uri: dev ? process.env.API_WS_URL_DEV : process.env.API_WS_URL_PROD, //`ws://next-graphql-server-ezoihhiegb.now.sh`, //`ws://localhost:4000/`,
+        uri: dev ? process.env.API_WS_URL_DEV : process.env.API_WS_URL_PROD,
         options: {
           reconnect: true
         }

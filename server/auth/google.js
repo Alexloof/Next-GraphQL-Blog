@@ -12,7 +12,6 @@ export default server => {
         callbackURL: 'http://localhost:4000/auth/googlecallback'
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log(accessToken, refreshToken, profile)
         const name =
           profile.displayName || profile.name
             ? `${profile.name.givenName} ${profile.name.familyName}`
@@ -30,7 +29,13 @@ export default server => {
           let user = await User.findOne({ googleId }).exec()
 
           if (user) {
-            done(null, user)
+            return done(null, user)
+          }
+
+          const emailExist = await User.findOne({ email }).exec()
+
+          if (emailExist) {
+            return done('Email already exists')
           }
 
           user = await User.create({
@@ -38,7 +43,7 @@ export default server => {
             name,
             googleId
           })
-          console.log('newUser', user)
+
           done(null, user)
         } catch (err) {
           console.log(err)
@@ -84,8 +89,7 @@ export default server => {
       failureRedirect: 'http://localhost:3000/login'
     }),
     (req, res) => {
-      console.log(req)
-      res.redirect('http://localhost:3000')
+      res.redirect('http://localhost:3000/authcallback')
     }
   )
 }
