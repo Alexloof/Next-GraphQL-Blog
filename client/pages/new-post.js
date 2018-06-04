@@ -130,7 +130,7 @@ class NewPost extends Component {
               <Form.Field>
                 <label>Content</label>
                 <TextArea
-                  rows="16"
+                  rows="14"
                   name="content"
                   onChange={this.handleChange}
                   placeholder="Write something nice..."
@@ -155,7 +155,7 @@ class NewPost extends Component {
 }
 
 const Container = styled.div`
-  padding: 50px 150px;
+  padding: 5% 10%;
 `
 
 const StyledImage = styled.img`

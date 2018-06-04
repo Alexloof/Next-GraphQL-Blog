@@ -50,7 +50,7 @@ class NextApp extends App {
         <ContextProvider>
           <ApolloProvider client={apolloClient}>
             <StyledContainer>
-              <Head title="Next Graphql - Blogg" />
+              <Head />
               <Nav {...propsWithClient} />
               <Component {...propsWithClient} />
               <Alert stack={{ limit: 3 }} />
