@@ -2,7 +2,7 @@ import { getUserId } from '../../../utils'
 
 export default async (parent, args, ctx) => {
   try {
-    console.log('Current user KÖRS')
+    //console.log(ctx)
     if (!ctx.user) throw new Error('Not authenticated')
 
     const user = ctx.db.model('user')

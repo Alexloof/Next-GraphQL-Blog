@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 
 export const initUser = req => {
   // if session cookie authorization
+  console.log('SE HÄR', req.request)
   const cookieToken =
     req.request && req.request.session && req.request.session.token
       ? req.request.session.token

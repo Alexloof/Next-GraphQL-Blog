@@ -15,8 +15,7 @@ export default async (_, { email, password, name }, ctx) => {
     user = await userModel.create({
       email,
       password: hashedPassword,
-      name,
-      createdAt
+      name
     })
 
     const token = jwt.sign({ userId: user._id }, process.env.AUTH_SECRET)

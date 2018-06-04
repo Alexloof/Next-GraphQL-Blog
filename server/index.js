@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser'
 import depthLimit from 'graphql-depth-limit'
 import helmet from 'helmet'
 import compression from 'compression'
-
+import initGoogleAuth from './auth/google'
 import resolvers from './resolvers'
 import typeDefs from './types'
 import db from './db'
@@ -65,6 +65,7 @@ const startServer = async () => {
   }
 
   server.express.use(session(sess))
+  initGoogleAuth(server.express)
 
   const corsOptions = {
     origin: dev ? process.env.CLIENT_URL_DEV : process.env.CLIENT_URL_PROD,
