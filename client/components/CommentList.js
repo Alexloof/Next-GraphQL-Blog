@@ -34,7 +34,7 @@ class CommentList extends Component {
     if (!input) return
 
     commentPost(commentPostOptions(this.props, input)).catch(e =>
-      showErrorAlert(parseError(e))
+      showErrorAlert(parseError(e.message))
     )
 
     this.setState({

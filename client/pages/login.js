@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Button, Form, Loader, Message, Header } from 'semantic-ui-react'
 
 import withUser from '../lib/withUser'
+import parseError from '../lib/parseError'
 
 import GoogleLoginButton from '../components/GoogleLoginButton'
 import StyledSignForm from '../components/StyledSignForm'
@@ -71,7 +72,11 @@ class Login extends Component {
               </Form.Field>
 
               {error && (
-                <Message error header="Ooops!" content={error.message} />
+                <Message
+                  error
+                  header="Ooops!"
+                  content={parseError(error.message)}
+                />
               )}
               {loading ? (
                 <StyledLoader active inline />

@@ -83,7 +83,7 @@ class PostCard extends Component {
                     onClick={() => {
                       likePost(likePostOptions(this.props))
                         .then(() => showSuccessAlert('You liked a Post!'))
-                        .catch(e => showErrorAlert(parseError(e)))
+                        .catch(e => showErrorAlert(parseError(e.message)))
                     }}
                   >
                     <Icon name="like" />
