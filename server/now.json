@@ -1,0 +1,8 @@
+{
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "dotenv": true,
+  "name": "next-graphql-server",
+  "alias": "next-graphql-api"
+}

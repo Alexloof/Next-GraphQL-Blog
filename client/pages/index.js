@@ -123,6 +123,7 @@ class Home extends Component {
       <Query
         query={ALL_POSTS}
         variables={{ sort: '-createdAt', limit: POSTS_LIMIT, offset: 0 }}
+        fetchPolicy="cache-and-network"
         notifyOnNetworkStatusChange
       >
         {({ loading, subscribeToMore, fetchMore, data: { allPosts } }) => {

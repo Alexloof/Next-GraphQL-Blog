@@ -5,6 +5,9 @@ import { GET_CURRENT_USER } from '../api/queries/user/getCurrentUser'
 import withUser from '../lib/withUser'
 
 class AuthCallback extends Component {
+  static getInitialProps(ctx) {
+    console.log('HEJ', ctx)
+  }
   async componentDidMount() {
     const { data } = await this.props.client.query({
       query: GET_CURRENT_USER
@@ -29,7 +32,7 @@ class AuthCallback extends Component {
       })
     }
 
-    Router.replace('/')
+    //Router.replace('/')
   }
   render() {
     return null

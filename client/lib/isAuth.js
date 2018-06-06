@@ -5,6 +5,9 @@ export default ctx => {
 
   let isAuth = false
   if (isFromServer) {
+    if (ctx.req.cookies['next-graphql.sid']) {
+      isAuth = true
+    }
     const cookies =
       ctx.req.headers && ctx.req.headers.cookie
         ? cookie.parse(ctx.req.headers.cookie, {})
