@@ -6,7 +6,7 @@ Client is built with React, Next js & Apollo client.
 
 The idea behind this app was that I wanted to learn all basic and advanced concepts when it comes to GraphQL together with Next js/React. This resulted in a great app that can fit very well as a boilerplate and as a inpiration source for upcoming projects.
 
-Live at: https://next-graphql-client.now.sh
+Live at: https://next-graphql.now.sh
 
 <!-- The app:
 ![alt text](https://github.com/Alexloof/Soundize/blob/master/Soundize-screen-one.PNG "My Music") -->

@@ -50,18 +50,18 @@ const startServer = async () => {
       mongooseConnection: initDB.connection,
       ttl: ONE_YEAR
     }),
+    proxy: true,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
-      domain: dev ? 'localhost' : '.next-graphql.now.sh',
+      domain: dev ? 'localhost' : '.next-graphql-api.now.sh',
       maxAge: ONE_YEAR
     }
   }
 
   if (!dev) {
     server.express.set('trust proxy', 1)
-    // sess.cookie.secure = true
+    sess.cookie.secure = true
   }
 
   server.express.use(session(sess))
@@ -72,7 +72,7 @@ const startServer = async () => {
   initGoogleAuth(server.express)
 
   const corsOptions = {
-    origin: true, //dev ? process.env.CLIENT_URL_DEV : process.env.CLIENT_URL_PROD,
+    origin: dev ? process.env.CLIENT_URL_DEV : process.env.CLIENT_URL_PROD,
     credentials: true
   }
 
