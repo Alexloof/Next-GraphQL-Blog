@@ -32,7 +32,9 @@ export const writePostOptions = props => {
       writePost.comments = []
 
       allPosts.posts.unshift(writePost)
-      allPosts.posts.pop()
+      if (allPosts.posts.length === POSTS_LIMIT) {
+        allPosts.posts.pop()
+      }
 
       cache.writeQuery({
         query: ALL_POSTS,

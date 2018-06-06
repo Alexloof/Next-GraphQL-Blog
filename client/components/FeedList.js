@@ -20,7 +20,7 @@ class FeedList extends Component {
           dataLength={posts.length}
           next={fetchMore}
           hasMore={hasMorePosts}
-          style={{ overflow: 'hidden' }}
+          style={{ overflow: 'visible' }}
         >
           <FlipMove
             duration={500}
@@ -56,6 +56,7 @@ class FeedList extends Component {
 const Container = styled.div`
   display: flex;
   flex-wrap: wrap;
+  flex: 1;
   .ui.card {
     margin: 15px;
     width: 310px;

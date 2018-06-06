@@ -4,8 +4,9 @@ import withApolloClient from '../lib/with-apollo-client'
 import { ApolloProvider } from 'react-apollo'
 import Router from 'next/router'
 import NProgress from 'nprogress'
-import { Container as StyledContainer } from 'semantic-ui-react'
+import { Container as SContainer } from 'semantic-ui-react'
 import Alert from 'react-s-alert'
+import styled from 'styled-components'
 
 import * as gtag from '../lib/gtag'
 
@@ -63,3 +64,11 @@ class NextApp extends App {
 }
 
 export default withApolloClient(NextApp)
+
+const StyledContainer = styled(SContainer)`
+  &&& {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+`
