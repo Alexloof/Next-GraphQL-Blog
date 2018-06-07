@@ -9,11 +9,12 @@ export const initUser = req => {
 
   // if session cookie authorization
   const cookieToken =
-    req.request && req.request.session && req.request.session.token
-      ? req.request.session.token
+    req.request &&
+    req.request.cookies &&
+    req.request.cookies['next-graphql.sid']
+      ? req.request.cookies['next-graphql.sid']
       : null
 
-  // if local signup/signin
   if (cookieToken) {
     return jwt.verify(cookieToken, process.env.AUTH_SECRET, (err, decoded) => {
       if (err) {

@@ -1,7 +1,10 @@
 const express = require('express')
 const next = require('next')
-const cookieParser = require('cookie-parser')
+const cookie = require('cookie')
 const compression = require('compression')
+const cookieParser = require('cookie-parser')
+
+const ONE_YEAR = 31556952000
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -22,6 +25,21 @@ app.prepare().then(() => {
   server.get('/logout', (req, res) => {
     res.clearCookie('next-graphql.sid')
     return res.redirect('/')
+  })
+
+  server.get('/authcallback', (req, res) => {
+    const token = req.query.token
+    if (token) {
+      res.setHeader(
+        'Set-Cookie',
+        cookie.serialize('next-graphql.sid', String(token), {
+          httpOnly: true,
+          secure: dev ? false : true,
+          maxAge: ONE_YEAR
+        })
+      )
+    }
+    return res.redirect('/callback')
   })
 
   server.get('*', (req, res) => {

@@ -5,9 +5,9 @@ import propTypes from 'prop-types'
 
 function parseCookies(req, options = {}) {
   if (req) {
-    return req.headers.cookie || ''
+    return req.cookies['next-graphql.sid'] || ''
   } else {
-    return document.cookie, options
+    return ''
   }
 }
 

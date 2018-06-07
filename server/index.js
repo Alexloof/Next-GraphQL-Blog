@@ -64,10 +64,10 @@ const startServer = async () => {
     sess.cookie.secure = true
   }
 
-  server.express.use(session(sess))
+  //server.express.use(session(sess))
 
   server.express.use(passport.initialize())
-  server.express.use(passport.session())
+  //server.express.use(passport.session())
 
   initGoogleAuth(server.express)
 

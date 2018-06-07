@@ -1,5 +1,6 @@
 var passport = require('passport')
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+import jwt from 'jsonwebtoken'
 
 const dev = process.env.NODE_ENV !== 'production'
 
@@ -77,15 +78,18 @@ export default server => {
   server.get(
     '/auth/googlecallback',
     passport.authenticate('google', {
+      session: false,
       failureRedirect: dev
         ? `${process.env.CLIENT_URL_DEV}/login`
         : `${process.env.CLIENT_URL_PROD}/login`
     }),
     (req, res) => {
+      const token = jwt.sign({ userId: req.user._id }, process.env.AUTH_SECRET)
+      console.log(token)
       res.redirect(
         dev
-          ? `${process.env.CLIENT_URL_DEV}/authcallback`
-          : `${process.env.CLIENT_URL_PROD}/authcallback`
+          ? `${process.env.CLIENT_URL_DEV}/authcallback?token=${token}`
+          : `${process.env.CLIENT_URL_PROD}/authcallback?token=${token}`
       )
     }
   )

@@ -25,7 +25,7 @@ function create(initialState, { getToken }) {
     return {
       headers: {
         ...headers,
-        Cookie: token
+        authorization: token ? `Bearer ${token}` : ''
       }
     }
   })
