@@ -2,12 +2,13 @@ import initApollo from './init-apollo'
 import Head from 'next/head'
 import { getDataFromTree } from 'react-apollo'
 import propTypes from 'prop-types'
+import cookie from 'cookie'
 
 function parseCookies(req, options = {}) {
   if (req) {
-    return req.cookies['next-graphql.sid'] || ''
+    return cookie.parse(req.headers.cookie || '')
   } else {
-    return ''
+    return localStorage.getItem('token')
   }
 }
 

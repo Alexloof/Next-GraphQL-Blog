@@ -39,7 +39,7 @@ app.prepare().then(() => {
         })
       )
     }
-    return res.redirect('/callback')
+    return res.redirect(`/callback?token=${token}`)
   })
 
   server.get('*', (req, res) => {

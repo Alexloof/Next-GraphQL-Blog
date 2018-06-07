@@ -5,7 +5,18 @@ import { GET_CURRENT_USER } from '../api/queries/user/getCurrentUser'
 import withUser from '../lib/withUser'
 
 class AuthCallback extends Component {
+  static getInitialProps(ctx) {
+    // make the token available in the client also
+    const token = ctx.query.token ? ctx.query.token : null
+    return {
+      token
+    }
+  }
   async componentDidMount() {
+    if (this.props.token) {
+      localStorage.setItem('token', this.props.token)
+    }
+
     const { data } = await this.props.client.query({
       query: GET_CURRENT_USER
     })

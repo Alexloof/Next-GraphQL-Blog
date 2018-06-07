@@ -59,8 +59,6 @@ class NewPost extends Component {
       .then(response => {
         const data = response.data
         this.setState({ imageURL: data.secure_url }, async () => {
-          console.log(data)
-
           try {
             const { data } = await writePost(writePostOptions())
 

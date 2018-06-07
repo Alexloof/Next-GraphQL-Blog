@@ -29,7 +29,7 @@ class Login extends Component {
     try {
       const { data } = await login()
 
-      Router.push('/authcallback')
+      Router.push(`/authcallback?token=${data.login.token}`)
     } catch (error) {
       this.setState({
         password: ''

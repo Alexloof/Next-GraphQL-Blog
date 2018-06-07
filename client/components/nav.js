@@ -12,6 +12,7 @@ class Nav extends Component {
   logout = () => {
     this.props.client.resetStore().then(() => {
       localStorage.removeItem('user')
+      localStorage.removeItem('token')
       Router.push('/logout')
     })
   }

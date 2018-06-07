@@ -29,8 +29,7 @@ class Login extends Component {
 
     try {
       const { data } = await signup()
-
-      Router.push('/authcallback')
+      Router.push(`/authcallback?token=${data.signup.token}`)
     } catch (error) {
       this.setState({
         email: '',

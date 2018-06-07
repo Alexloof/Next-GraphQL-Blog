@@ -21,11 +21,19 @@ function create(initialState, { getToken }) {
   })
 
   const authLink = setContext((_, { headers }) => {
-    const token = getToken()
+    const tokenObj = getToken()
+
+    let token
+    if (tokenObj && tokenObj['next-graphql.sid']) {
+      token = tokenObj['next-graphql.sid']
+    } else {
+      token = tokenObj
+    }
+
     return {
       headers: {
         ...headers,
-        authorization: token ? `Bearer ${token}` : ''
+        authorization: `Bearer ${token ? token : 'fan'}`
       }
     }
   })
