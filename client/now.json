@@ -2,6 +2,6 @@
   "env": {
     "NODE_ENV": "production"
   },
-
-  "dotenv": true
+  "dotenv": true,
+  "alias": "https://next-graphql.now.sh"
 }

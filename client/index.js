@@ -3,11 +3,18 @@ const next = require('next')
 const cookie = require('cookie')
 const compression = require('compression')
 const cookieParser = require('cookie-parser')
+const sitemapAndRobots = require('./lib/sitemapAndRobots')
 
 const ONE_YEAR = 31556952000
 
 const port = parseInt(process.env.PORT, 10) || 3000
+
 const dev = process.env.NODE_ENV !== 'production'
+
+const ROOT_URL = dev
+  ? `http://localhost:${port}`
+  : 'https://next-graphql.now.sh'
+
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
@@ -42,14 +49,14 @@ app.prepare().then(() => {
     return res.redirect(`/callback?token=${token}`)
   })
 
+  sitemapAndRobots({ server })
+
   server.get('*', (req, res) => {
     return handle(req, res)
   })
 
   server.listen(port, err => {
     if (err) throw err
-    console.log(
-      `> Ready on http://localhost:${port}. [${process.env.NODE_ENV}]`
-    )
+    console.log(`> Ready on ${ROOT_URL}. [${process.env.NODE_ENV}]`)
   })
 })

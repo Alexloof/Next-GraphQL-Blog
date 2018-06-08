@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "node index.js",
     "build": "next build",
-    "start": "set NODE_ENV=production&& node index.js"
+    "start": "set NODE_ENV=production&& node index.js",
+    "now": "now && now alias"
   },
   "dependencies": {
     "@zeit/next-css": "^0.2.0",
@@ -18,7 +19,6 @@
     "compression": "^1.7.2",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
-    "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
     "file-loader": "^1.1.11",
@@ -41,9 +41,13 @@
     "recompose": "^0.27.1",
     "semantic-ui-css": "^2.3.1",
     "semantic-ui-react": "^0.80.2",
+    "sitemap": "^1.13.0",
     "styled-components": "^3.2.5",
     "subscriptions-transport-ws": "^0.9.9",
     "url-loader": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
   },
   "author": "alexloof",
   "license": "ISC"
