@@ -4,6 +4,8 @@ const cookie = require('cookie')
 const compression = require('compression')
 const cookieParser = require('cookie-parser')
 const sitemapAndRobots = require('./lib/sitemapAndRobots')
+const { join } = require('path')
+const { parse } = require('url')
 
 const ONE_YEAR = 31556952000
 
@@ -52,7 +54,15 @@ app.prepare().then(() => {
   sitemapAndRobots({ server })
 
   server.get('*', (req, res) => {
-    return handle(req, res)
+    const parsedUrl = parse(req.url, true)
+    const { pathname } = parsedUrl
+    if (pathname === '/service-worker.js') {
+      const filePath = join(__dirname, '.next', pathname)
+
+      app.serveStatic(req, res, filePath)
+    } else {
+      return handle(req, res)
+    }
   })
 
   server.listen(port, err => {
