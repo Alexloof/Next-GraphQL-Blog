@@ -4,7 +4,8 @@
     "start": "node ./build/main.js",
     "dev": "backpack dev",
     "build": "backpack build",
-    "postinstall": "backpack build"
+    "postinstall": "backpack build",
+    "deploy": "now && now alias"
   },
   "dependencies": {
     "backpack-core": "^0.7.0",

@@ -4,7 +4,7 @@
     "dev": "node index.js",
     "build": "next build",
     "start": "set NODE_ENV=production&& node index.js",
-    "now": "now && now alias"
+    "deploy": "now && now alias"
   },
   "dependencies": {
     "@zeit/next-css": "^0.2.0",
